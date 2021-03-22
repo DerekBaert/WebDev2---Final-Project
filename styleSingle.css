@@ -1,0 +1,163 @@
+html, body
+{
+    background-color: #2d2d2a;
+}
+
+h1
+{
+    color:rgba(255,255,255,.55);
+}
+
+h4
+{    
+    font-size: 2rem;
+}
+
+.title
+{
+    color: #3F5E5A;
+    font-weight: bold;
+    
+}
+
+.page-header 
+{
+    margin-left: 5%;
+}
+
+.dropdown-menu.show, .dropdown-menu li
+{
+    background-color: #212529;
+    color:whitesmoke
+    
+}
+
+.dropdown-item
+{
+    color:#6c757d;
+}
+
+.dropdown-menu a
+{
+    color:#6c757d;
+}
+
+.gameData
+{    
+    display: flex;    
+    margin: 10px auto 10px auto;
+    padding: 10px;
+    width: 1200px;
+    align-items: center;
+    justify-content: center;
+}
+
+    .quickdata
+    {
+        color: rgba(255,255,255,.55);
+        border: 1px solid #3f5e5a;
+        border-radius: 5px;
+        background-color: #212529;
+        width: 600px;
+        height: 150px;
+        padding: 20px;
+        padding-top: 15px;
+        display: flex;
+        margin: 5px;
+        flex-direction: column;
+    }
+
+        .quickdata.title
+        {
+            height: 75px;   
+            align-self: center;
+            justify-self: center;  
+            flex-direction: row;     
+            width: auto;              
+        }
+
+        .quickdata.description
+        {
+            width: 1200px;
+            height: max-content;
+            padding-top: 20px;
+            margin: 10px auto 10px auto;
+        }
+
+        .quickdata.description p
+        {
+            margin-bottom: 0px;
+        }
+
+    .image
+    {
+        display: flex;
+        align-items: center;
+        border: 1px solid #3f5e5a;
+        border-radius: 5px;
+        margin: 10px;
+    }
+
+        .image img
+        {
+            max-width: 1000px;
+            max-height: 500px;   
+            margin: auto;    
+        }
+
+#game
+{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-outline-success
+{
+    border-color: #3f5e5a;
+    color: rgba(255,255,255,.55);
+}
+
+.btn-outline-success:hover
+{
+    background-color: #353831;
+}
+
+.addReview
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.btn.btn-primary
+{
+    border-color: #3f5e5a;
+    color: rgba(255,255,255,.55);
+    background-color: #212529;
+}
+
+.btn.btn-primary:hover
+{
+    background-color: #353831;
+}
+
+.addReview form
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.addReview input
+{
+    margin: 10px;
+    margin-left: auto;
+}
+
+

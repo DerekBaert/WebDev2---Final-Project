@@ -1,0 +1,157 @@
+html, body
+{
+    background-color: #2d2d2a;
+}
+
+h1, h2
+{
+    color:rgba(255,255,255,.55);
+}
+
+.radio-label
+{
+    color:rgba(255,255,255,.55);
+    margin: 5px;
+}
+
+
+.page-header
+{
+    margin-left: 5%;
+}
+
+h2
+{
+    margin-left: 8%;
+    margin-top: 10px;
+    font-size: 1.5em;
+}
+
+.dropdown-menu.show, .dropdown-menu li
+{
+    background-color: #212529;
+    color:whitesmoke    
+}
+
+.dropdown-menu a
+{
+    color:#6c757d;
+}
+
+.dropdown-item
+{
+    color:#6c757d;
+}
+
+
+.game, .platform
+{
+    border: 1px solid #3f5e5a;
+    border-radius: 5px;
+    display: flex;    
+    margin: 10px auto 10px auto;
+    padding: 10px;
+    width: 625px;
+    background-color: #212529;
+    align-items: center;
+}
+
+.platform
+{
+    width: 300px;
+    flex-direction: column;
+}
+
+    .quickdata
+    {
+        margin-top: 10px;
+        margin-left: 10px;
+        color: rgba(255,255,255,.55);
+    }
+
+.thumbnail
+{
+    display: flex;
+    align-items: center;
+}
+
+.game img
+{
+    max-width: 150px;
+    max-height: 200px;         
+}
+
+#games
+{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.btn-outline-success
+{
+    border-color: #3f5e5a;
+    color: rgba(255,255,255,.55);
+}
+
+.btn-outline-success:hover
+{
+    background-color: #353831;
+}
+
+.addReview, .viewGames
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.addReview form, .viewGames form
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-control.me-2
+{
+    width: 250px;
+}
+
+.radio
+{
+    display: flex;
+    margin-top: 0px;
+}
+
+.addReview input
+{
+    margin: 5px;
+    margin-left: auto;
+}
+
+.btn.btn-primary
+{
+    border-color: #3f5e5a;
+    color: rgba(255,255,255,.55);
+    background-color: #212529;
+}
+
+.btn.btn-primary:hover
+{
+    background-color: #353831;
+}
+
+.gameSolo
+{    
+    width: 1200px;
+}
+
+#indexContent
+{
+    display: flex;
+    flex-direction: row;
+}
+
