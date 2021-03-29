@@ -10,28 +10,7 @@
 
 
         <div class="container" id="games">
-            <div class="game">
-                <div class="thumbnail"><img src="https://static.wikia.nocookie.net/metroid/images/7/75/Metroid_Prime_3_Packaging.jpg" alt="Boxart"></div>
-                <div class="quickdata">
-                    <h4>Metroid Prime: Corruption</h4>
-                    <h5>Release Date: August 28, 2007</h5> 
-                    <h5>Platforms: Gamecube, Wii</h5> 
-                    <h5>Genre: First-person shooter</h5>
-                    <h5>Rating: T</h5>
-                    <h5>Average Score: 10/10</h5>
-                </div>
-            </div>
-            <div class="game">
-                <div class="thumbnail"><img src="https://static.wikia.nocookie.net/metroid/images/7/75/Metroid_Prime_3_Packaging.jpg" alt="Boxart"></div>
-                <div class="quickdata">
-                    <h4>Metroid Prime: Corruption</h4>
-                    <h5>Release Date: August 28, 2007</h5> 
-                    <h5>Platforms: Gamecube, Wii</h5> 
-                    <h5>Genre: First-person shooter</h5>
-                    <h5>Rating: T</h5>
-                    <h5>Average Score: 10/10</h5>
-                </div>                
-            </div>
+            
         </div>  
         
 

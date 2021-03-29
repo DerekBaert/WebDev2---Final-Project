@@ -69,9 +69,17 @@
                     <?php endif ?>
                     <div class="thumbnail"><img src=<?= $image ?> alt="Boxart"></div>  
                     <div class="quickdata">
-                        <h4><?= $game['name']?></h4>
+                        <?php if(strlen($game['name']) > 25) :?>
+                            <h4><?=substr($game['name'], 0, 25)?>...</h4>
+                        <?php else : ?>
+                            <h4><?= $game['name']?></h4> 
+                        <?php endif ?>
                         <h5>Release Date: <?= date('F d, Y', $game['first_release_date'])?></h5> 
+                        <?php if(strlen(commaList($game['platforms'], 'name')) > 25) :?>
+                            <h5>Platforms: <?=substr(commaList($game['platforms'], 'name'), 0, 25)?>...</h5>
+                        <?php else : ?>
                             <h5>Platforms: <?= commaList($game['platforms'], 'name') ?> </h5> 
+                        <?php endif ?> 
                         <?php if(!array_key_exists('age_ratings', $game)): ?>
                             <h5>Age Rating: [Unrated]</h5>
                         <?php else: ?>

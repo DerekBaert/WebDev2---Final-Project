@@ -8,12 +8,21 @@
 
     if($_GET)
     {
-        $consoleId = $_GET['id'];
-        $console = $_GET['name'];
+        $consoleId = FILTER_INPUT(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $console = FILTER_INPUT(INPUT_GET, 'name', FILTER_SANITIZE_STRING);         
         session_start();
 
         require 'ProjectFunctions.php';
         require 'header.php';
+
+        if(isset($_GET['offset']))
+        {
+            $pageOffset = FILTER_INPUT(INPUT_GET, 'offset', FILTER_VALIDATE_INT);
+        }
+        else
+        {
+            $pageOffset = 0;
+        }
 
         if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
         {
@@ -39,10 +48,18 @@
                 );
 
         //$body = 'fields date, game.*; where date > ' . strtotime('-14 days') . ';';
-        $body = 'fields id, name, parent_game, version_parent, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
+        $body = 'query games/count "Count" 
+                {
+                    where release_dates.platform = ' . $consoleId . ' & first_release_date != null;
+                };' .
+
+                'query games "Games" 
+                {
+                    fields id, name, parent_game, version_parent, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
                     sort name asc; 
                         where release_dates.platform = ' . $consoleId . ' & first_release_date != null; 
-                            limit 24;';
+                            limit 99; offset ' . $pageOffset .'; 
+                };';
         
         $post = array
         ('http' =>
@@ -55,7 +72,7 @@
         );
 
         $context  = stream_context_create($post);
-        $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
+        $json = file_get_contents('https://api.igdb.com/v4/multiquery', false, $context);
         $games = json_decode($json, true);     
     }  
     else
@@ -63,21 +80,12 @@
         header("Location: index.php");
     }     
 
-    
-    /*if(isset($_GET['getparam']))
-    {
-        $url = rawurldecode($_GET['getparam']);      
-    }      
-    
-    $json = file_get_contents($url);
-    $games = json_decode($json, true);
-
-    $next = rawurlencode($games['next']);
-    $previous = rawurlencode($games['previous']);*/
+    $pages = floor($games[0]['count'] / 100);
+    echo $pages;
 ?>        
         <div class="container" id="games">
             <h2><?=$console?></h2>
-            <?php foreach ($games as $game): ?>
+            <?php foreach ($games[1]['result'] as $game): ?>
                 <?php if(array_key_exists('first_release_date', $game)): ?>
                     <?php if(!isset($game['parent_game']) && !isset($game['version_parent'])) : ?>
                         <div class="game">
@@ -88,9 +96,12 @@
                             <?php endif ?>
                             <div class="thumbnail"><img src=<?= $image ?> alt="Boxart"></div>
                             <div class="quickdata">
-                                <h4><?= $game['name']?></h4>
-                                <h5>Release Date: <?= date('F d, Y', $game['first_release_date'])?></h5> 
-                                <h5>Platforms: <?= commaList($game['platforms'], 'name') ?> </h5>         
+                                <?php if(strlen($game['name']) > 25) :?>
+                                    <h4><?=substr($game['name'], 0, 50)?>...</h4>
+                                <?php else : ?>
+                                    <h4><?= $game['name']?></h4> 
+                                <?php endif ?>                                
+                                <h5>Release Date: <?= date('F d, Y', $game['first_release_date'])?></h5>                                         
                                 <?php if(!array_key_exists('age_ratings', $game)): ?>
                                     <h5>Age Rating: [Unrated]</h5>
                                 <?php else: ?>
@@ -99,10 +110,6 @@
                                 <h5>Average Score: 10/10</h5>
                             </div>
                             <div class="addReview"> 
-                                <form action="postReview.php" method="post">
-                                    <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
-                                    <input type="submit" name = <?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
-                                </form>       
                                 <form action="gamePage.php" method="post">  
                                     <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
                                     <input type="submit" name="View Reviews" class="btn btn-primary" value="View Reviews"/>
@@ -113,6 +120,19 @@
                 <?php endif ?>
             <?php endforeach ?>
         </div>  
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="console.php">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="console.php">1</a></li>
+                <li class="page-item"><a class="page-link" href="console.php?offset=100">2</a></li>
+                <li class="page-item"><a class="page-link" href="console.php?offset=200">3</a></li>
+                <li class="page-item"><a class="page-link">...</a></li>
+                <li class="page-item"><a class="page-link" href="console.php"><?=$pages - 2?></a></li>
+                <li class="page-item"><a class="page-link" href="console.php"><?=$pages - 1?></a></li>
+                <li class="page-item"><a class="page-link" href="v"><?=$pages?></a></li>
+                <li class="page-item"><a class="page-link" href="console.php">Next</a></li>
+            </ul>
+        </nav>
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
