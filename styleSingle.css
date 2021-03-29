@@ -13,11 +13,10 @@ h4
     font-size: 2rem;
 }
 
-.title
+.title, .review h1
 {
     color: #3F5E5A;
     font-weight: bold;
-    
 }
 
 .page-header 
@@ -42,15 +41,56 @@ h4
     color:#6c757d;
 }
 
-.gameData
+.reviewHeader
+{
+    display: flex;
+    justify-content: space-between;    
+}
+
+    .reviewHeader h1
+    {
+        margin-right: 15px;
+        align-self: center;
+        color: #4c7262;
+        font-size: xx-large;
+    }
+
+    .reviewHeader h6, .reviewHeader h5
+    {
+        margin: 1px;
+        font-weight: lighter;
+    }
+
+    .reviewHeader h5
+    {
+        color: #4c6672;
+        font-weight: bold;
+    }
+
+.gameData, .reviews
 {    
     display: flex;    
     margin: 10px auto 10px auto;
     padding: 10px;
     width: 1200px;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 }
+
+    .review
+    {
+        color: rgba(255,255,255,.55);
+        border: 1px solid #3f5e5a;
+        border-radius: 5px;
+        background-color: #212529;
+        width: 375px;
+        height: 200px;
+        padding: 20px;
+        padding-top: 15px;
+        display: flex;
+        margin: 5px;
+        flex-direction: column;
+    }
 
     .quickdata
     {
@@ -83,10 +123,41 @@ h4
             padding-top: 20px;
             margin: 10px auto 10px auto;
         }
+        
 
         .quickdata.description p
         {
             margin-bottom: 0px;
+        }
+
+        .quickdata.message
+        {
+            align-self: center;
+            height: 85px;
+            width: 400px;
+        }
+
+        .quickdata.message p
+        {
+            align-self: center;
+            color: red;
+            margin: 0px;
+        }
+        
+        .quickdata.message .registerLogin
+        {
+            align-self: center;
+            color: rgba(255,255,255,.55);
+        }
+
+        .quickdata.message .registerLogin a
+        {
+            color: rgba(255,255,255,.55);
+        }
+        
+        .quickdata.message .registerLogin a:hover
+        {
+            color: rgba(255, 255, 255, 0.342);
         }
 
     .image

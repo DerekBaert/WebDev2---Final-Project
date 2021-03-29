@@ -5,11 +5,10 @@
  ------------>
 
 <?php          
-
     session_start();
 
     require 'ProjectFunctions.php'; 
-    require 'header.php';
+    require 'header.php';   
 
     if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
     {
@@ -34,7 +33,6 @@
                 'Authorization: Bearer ' .  $token
             );
 
-    //$body = 'fields date, game.*; where date > ' . strtotime('-14 days') . ';';
     $body = 'fields id, name, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
                 sort first_release_date desc; 
                     where first_release_date > ' . strtotime('-14 days') . ' & first_release_date < ' . strtotime(date(('Y-m-d'))) . '; 
@@ -59,8 +57,9 @@
     //var_dump($games[5]['age_ratings']);
     //echo array_key_exists('age_ratings', $games[5]);
 ?>
-        <h2>New releases</h2>
+        
         <div class="container" id="games">
+            <h2>New releases</h2>
             <?php foreach ($games as $game): ?>
                 <div class="game">
                     <?php if(array_key_exists('cover', $game)) : ?>
@@ -80,11 +79,7 @@
                         <?php endif  ?>    
                         <h5>Average Score: 10/10</h5>
                     </div>
-                    <div class="addReview"> 
-                        <form action="postReview.php" method="post">
-                            <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
-                            <input type="submit" name = <?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
-                        </form>       
+                    <div class="addReview">      
                         <form action="gamePage.php" method="post">  
                             <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
                             <input type="submit" name="View Reviews" class="btn btn-primary" value="View Reviews"/>

@@ -6,7 +6,6 @@
 
 <?php
     session_start();
-
     require 'ProjectFunctions.php'; 
     require 'header.php';
 

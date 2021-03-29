@@ -5,16 +5,14 @@
  ------------>
 
 <?php
+    session_start();
+    require 'header.php';
+    require 'ProjectFunctions.php';    
 
     if($_POST)
     {
 
-        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);           
-
-        session_start();
-
-        require 'ProjectFunctions.php';
-        require 'header.php';
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);                
         
         if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
         {
@@ -33,31 +31,34 @@
 
             // Start building query
             $header = array
-                    (
-                        'Content-Type: application/application/x-www-form-urlencoded\r\n',
-                        'Client-ID: dnk3ybvozhyxj1fsck4crna182t1yy',
-                        'Authorization: Bearer ' .  $token
-                    );
+                        (
+                            'Content-Type: application/application/x-www-form-urlencoded\r\n',
+                            'Client-ID: dnk3ybvozhyxj1fsck4crna182t1yy',
+                            'Authorization: Bearer ' .  $token
+                        );
 
             //$body = 'fields date, game.*; where date > ' . strtotime('-14 days') . ';';
-            $body = 'fields id, name, cover.image_id, age_ratings.rating, first_release_date, genres.name, summary, platforms.name; 
-                        sort first_release_date asc; 
-                            where id = ' . $id . ';';
+        $body = 'fields id, name, cover.image_id, age_ratings.rating, first_release_date, genres.name, summary, platforms.name; 
+                    sort first_release_date asc; 
+                        where id = ' . $id . ';';
             
-            $post = array
-            ('http' =>
-                array
-                (
-                    'method'  => 'POST',
-                    'header'  => $header,
-                    'content' => $body
-                )
-            );
+        $post = array
+                ('http' => array
+                            (
+                                'method'  => 'POST',
+                                'header'  => $header,
+                                'content' => $body
+                            )
+                );
 
-            $context  = stream_context_create($post);
-            $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
-            $game = json_decode($json, true)[0];        
-        }    
+        $context  = stream_context_create($post);
+        $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
+        $game = json_decode($json, true)[0];  
+            
+        $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE game_id = " . $id;
+        $statement = $db->prepare($query); 
+        $statement->execute();
+    }    
 
     //var_dump($game);
 ?>
@@ -93,13 +94,46 @@
             </div>              
             <div class ="quickdata description">
                     <p><?= $game['summary'] ?></p>
-            </div>
+            </div>            
             <div class="addReview"> 
-                <form action="postReview.php" method="post">                  
-                    <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
-                    <input type="submit" name = <?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
-                </form>                        
+                <?php if(isset($_SESSION['user'])) : ?>
+                    <form action="postReview.php">                  
+                        <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
+                        <input type="submit" name = <?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
+                    </form>   
+                <?php else: ?>
+                    <div class ="quickdata message">
+                        <p>Must be a registered user to post reviews.</p>
+                        <p class='registerLogin'><a href='createAccount.php'>Register</a> or <a href='login.php'>Login</a> here.</p>
+                    </div>                    
+                <?php endif ?>                     
             </div> 
+            <div class = "reviews">
+                <?php while($row = $statement->fetch()) : ?>
+                    <div class="review">
+                        <div class= "reviewHeader">
+                                <h1><?=$row['score']?>/10</h1>
+                            <div>
+                                <h5><?=$row['username']?></h5>
+                                <h6><?= date('F d, Y', strtotime($row['date_posted']))?></h6>
+                            </div>
+                        </div>                        
+                        <div class = "reviewContent">
+                        <?php if(strlen($row['review']) > 200) : ?>
+                            <p><?= substr($row['review'], 0, 200)?>...</p> 
+                        <?php else : ?>   
+                            <p><?=$row['review']?></p>
+                        <?php endif ?>                            
+                        </div>
+                        <div class="reviewFooter">
+                            <a>All reviews from this user.</a>
+                        <?php if(strlen($row['review']) > 200) : ?>
+                            <a>Read full review.</a>
+                        <?php endif ?>
+                        </div>
+                    </div>
+                <?php endwhile ?>
+            </div>
         </div> 
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

@@ -3,7 +3,25 @@
  * Date: March 21, 2021
  * File: Header for all pages
  ------------>
+<?php    
+    if(!isset($db))
+    {
+        define('DB_DSN','mysql:host=localhost;dbname=reviewbase');
+        define('DB_USER','UserConnect');
+        define('DB_PASS','Password01');
 
+        try 
+        {
+            $db = new PDO(DB_DSN, DB_USER, DB_PASS);
+        } 
+        catch (PDOException $e) 
+        {
+            print "Error: " . $e->getMessage();
+            die(); // Force execution to stop on errors.
+        }
+    }
+    
+?>
 <!doctype html>
 <html lang="en">
     <head>
@@ -16,6 +34,14 @@
     <body>    
         <div class="page-header">
             <h1>ReviewBase</h1>
+            <div class="sign-in">
+                <?php if(!isset($_SESSION['user'])) :?>
+                    <a href="login.php">Login</a>
+                    <a href="createAccount.php">Create Account</a>
+                <?php else : ?>
+                    <a href="logout.php">Logout</a>
+                <?php endif ?>
+            </div>
         </div>
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

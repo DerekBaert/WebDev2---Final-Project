@@ -17,14 +17,46 @@ h1, h2
 
 .page-header
 {
-    margin-left: 5%;
+    width: 1320px;
+    padding-right: var(--bs-gutter-x,.75rem);
+    padding-left: var(--bs-gutter-x,.75rem);
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
 }
+
+    .page-header h1
+    {
+        width: 90%;
+    }
+
+    .sign-in
+    {
+        display: grid;
+    }
+
+        .sign-in a
+        {
+            border-color: #3f5e5a;
+            color: rgba(255,255,255,.55);
+        }
 
 h2
 {
-    margin-left: 8%;
     margin-top: 10px;
     font-size: 1.5em;
+}
+
+    .logout-message
+    {
+        margin: auto;
+        margin-top: 10px;
+        width:30%;
+    }
+
+#games h2
+{
+    width: 100%;
 }
 
 .dropdown-menu.show, .dropdown-menu li
@@ -155,3 +187,103 @@ h2
     flex-direction: row;
 }
 
+.login, .newReview
+{
+    color:rgba(255,255,255,.55);
+    border: 1px solid #3f5e5a;
+    border-radius: 5px;
+    padding: 10px;
+    padding-left: 25px;
+    width: 350px;
+    background-color: #212529;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 10px;
+}
+
+.newReview
+{
+    width: 50%;
+}
+
+    .newReview textarea
+    {
+        color:rgba(255,255,255,.55);
+        border: 1px solid #3f5e5a;
+        background-color: #353831;
+    }
+
+    .newReview #submitReview
+    {
+        width: 40%;
+        align-self: center;
+        margin-bottom: 10px;
+    }
+
+    .reviewScore
+    {
+        display: flex;
+        margin: 10px;
+        justify-content: flex-end;
+    }
+
+        .reviewScore select
+        {
+            height: 25px;
+            background-color: #353831;
+            color:rgba(255,255,255,.55);
+        }
+
+    #username, #password, #email
+    {
+        width: 75%;
+        background-color: #6c757d;
+    }
+
+    .login .btn.btn-outline-success
+    {
+        border-color: #3f5e5a;
+        color: rgba(255,255,255,.55);
+        background-color: #212529;
+        margin-top: 10px;
+        width: 50%;
+    }
+
+    .login #submitLogin
+    {
+        width: 50%;
+        align-self: center;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    .login input
+    {
+        margin: 5px;
+    }
+
+    .invalidLogin
+    {
+        color: red;
+    }
+
+    .login h6
+    {
+        margin-top: 10px;
+    }
+
+    .login a
+    {
+        color: #3f5e5a;
+    }
+
+    .login a:hover
+    {
+        color: #5e7774;
+    }
+
+    .login a:active
+    {
+        color: #353831;
+    }

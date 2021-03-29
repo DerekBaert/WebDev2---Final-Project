@@ -78,37 +78,35 @@
 <div class="container" id="games">
     <?php if($category == 'game') : ?>
         <?php $i = 1?>
-        <?php foreach ($results as $game): ?>            
-            <div class="game">
-                <?php if(array_key_exists('cover', $game)) : ?>
-                    <?php $image = 'https://images.igdb.com/igdb/image/upload/t_cover_big/' . $game['cover']['image_id'] . '.jpg' ?>
-                <?php else : ?>
-                    <?php $image = 'placeholder.png' ?>
-                <?php endif ?>
-                <div class="thumbnail"><img src=<?= $image ?> alt="Boxart"></div>  
-                <div class="quickdata">
-                    <h4><?= $game['name']?></h4>
-                    <h5>Release Date: <?= date('F d, Y', $game['first_release_date'])?></h5> 
-                    <h5>Platforms: <?= commaList($game['platforms'], 'name') ?> </h5> 
-                    <?php if(!array_key_exists('age_ratings', $game)): ?>
-                        <h5>Age Rating: [Unrated]</h5>
-                    <?php else: ?>
-                        <h5>Age Rating: <?= getRating($game['age_ratings'][0]['rating']) ?></h5>
-                    <?php endif  ?>    
-                    <h5>Average Score: 10/10</h5>
-                </div>
-                <div class="addReview"> 
-                    <form action="postReview.php" method="post">
-                        <input type="hidden" id="PostId<?=$i?>" name="id" value="<?= $game['id'] ?>" />
-                        <input type="submit" name = <?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
-                    </form>       
-                    <form action="gamePage.php" method="post">  
-                        <input type="hidden" id="ReviewId<?=$i?>" name="id" value="<?= $game['id'] ?>" />
-                        <input type="submit" name="View Reviews" class="btn btn-primary" value="View Reviews"/>
-                    </form>                
-                </div>
-            </div>    
-            <?php $i .= 1 ?>
+        <?php foreach ($results as $game): ?>   
+            <?php if(array_key_exists('first_release_date', $game)): ?>         
+                <div class="game">
+                    <?php if(array_key_exists('cover', $game)) : ?>
+                        <?php $image = 'https://images.igdb.com/igdb/image/upload/t_cover_big/' . $game['cover']['image_id'] . '.jpg' ?>
+                    <?php else : ?>
+                        <?php $image = 'placeholder.png' ?>
+                    <?php endif ?>
+                    <div class="thumbnail"><img src=<?= $image ?> alt="Boxart"></div>  
+                    <div class="quickdata">
+                        <h4><?= $game['name']?></h4>                    
+                        <h5>Release Date: <?= date('F d, Y', $game['first_release_date'])?></h5> 
+                        <h5>Platforms: <?= commaList($game['platforms'], 'name') ?> </h5> 
+                        <?php if(!array_key_exists('age_ratings', $game)): ?>
+                            <h5>Age Rating: [Unrated]</h5>
+                        <?php else: ?>
+                            <h5>Age Rating: <?= getRating($game['age_ratings'][0]['rating']) ?></h5>
+                        <?php endif  ?>    
+                        <h5>Average Score: 10/10</h5>
+                    </div>
+                    <div class="addReview">        
+                        <form action="gamePage.php" method="post">  
+                            <input type="hidden" id="ReviewId<?=$i?>" name="id" value="<?= $game['id'] ?>" />
+                            <input type="submit" name="View Reviews" class="btn btn-primary" value="View Reviews"/>
+                        </form>                
+                    </div>
+                </div>    
+                <?php $i .= 1 ?>
+            <?php endif ?>
         <?php endforeach ?>              
     <?php else : ?>
         <?php foreach ($results as $platform): ?>

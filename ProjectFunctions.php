@@ -1,8 +1,48 @@
-<?php
+<?php    
+
+    function file_upload_path($originalFilename, $uploadSubfolder = 'profile_images') 
+    {
+        $currentFolder = dirname(__FILE__);
+        $segments = [$currentFolder, $uploadSubfolder, basename($originalFilename)];
+        return join(DIRECTORY_SEPARATOR, $segments);
+    }
+
+    function file_is_an_image($temporary_path, $new_path)
+    {
+        $permittedMimes      = ['image/gif', 'image/jpeg', 'image/png'];
+        $permittedExtensions = ['gif', 'jpg', 'jpeg', 'png'];
+
+        $fileExtension   = pathinfo($new_path, PATHINFO_EXTENSION);
+        $fileMime       = mime_content_type($temporary_path);
+
+        $validExtension = in_array($fileExtension, $permittedExtensions);
+        $validMime     = in_array($fileMime, $permittedMimes);
+
+        return $validExtension && $validMime;
+    }
+
+    function isInUse($entry, $db, $column)
+    {
+        $query = "SELECT * FROM user WHERE " . $column . " = :Entry";  
+        $statement = $db->prepare($query);
+        
+        $statement->bindvalue(':Entry', $entry);
+        $statement->execute(); 
+
+        $row = $statement->fetchAll();
+
+        if(count($row) == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
     function verifyConsole($consoleId)
     {
-
         $validId = false;
         $name = '';
         switch($consoleId)
