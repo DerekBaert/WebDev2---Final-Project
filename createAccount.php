@@ -16,10 +16,10 @@
  
         if ($image_upload) 
         {
-            $image_filename       = $_FILES['profile']['name'];
+            $temp                 = explode(".", $_FILES["profile"]["name"]);     
+            $image_filename       = round(microtime(true)) . '.' . end($temp);;
             $temporary_path       = $_FILES['profile']['tmp_name'];
-            $new_image_path       = file_upload_path($image_filename);
-            $uniqueId             = uniqid();
+            $new_image_path       = file_upload_path($image_filename);            
 
             if (file_is_an_image($temporary_path, $new_image_path)) 
             {
@@ -47,6 +47,7 @@
         {
             $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
             $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+            $retype = filter_input(INPUT_POST, 'retype', FILTER_SANITIZE_STRING);
             $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
 
             if(isInUse($username, $db, 'username'))
@@ -59,25 +60,47 @@
                 $validEntry = false;
                 $errorMessage = 'Email address is already in use.';
             }
+            else if($retype != $password)
+            {
+                $validEntry = false;
+                $errorMessage = 'Passwords must match.';
+            }
             else
             {
-                if($validFile)
+                if($validFile && $validEntry)
                 {
+                    $imageQuery = "INSERT INTO user_images (original, thumbnail,  medium) values (:Original, :Thumbnail, :Medium)";
+                    $statement = $db->prepare($imageuery); 
+                    $statement->bindValue(':Original', $imagePath);
+                    $statement->bindValue(':Thumbnail', $withoutExt . '_Thumbnail' . '.' . $fileExtension);
+                    $statement->bindValue(':Medium', $withoutExt . '_Medium' . '.' . $fileExtension);
+                    $statement->execute();
+
                     $query = "INSERT INTO user (username, password, email, profile_picture) values (:Username, :Password, :Email, :ImagePath)";
                     $statement = $db->prepare($query); 
-                    $statement->bindValue(':ImagePath', $imagePath);
+                    $statement->bindValue(':ImagePath', $db->lastInsertId());
+                    $statement->bindValue(':Username', $username); 
+                    $statement->bindValue(':Password', $password);
+                    $statement->bindValue(':Email', $email);
+                    $statement->execute();
                 }
-                else
+                else if($validEntry && !$image_upload)
                 {
-                    $query = "INSERT INTO user (username, password, email) values (:Username, :Password, :Email)";
+                    $imageQuery = "INSERT INTO user_images (original, thumbnail,  medium) values (:Original, :Thumbnail, :Medium)";
+                    $statement = $db->prepare($imageuery); 
+                    $statement->bindValue(':Original', 'Placeholder.png');
+                    $statement->bindValue(':Thumbnail', 'Placeholder_Thumbnail.png');
+                    $statement->bindValue(':Medium', 'Placeholder_Medium.png');
+                    $statement->execute();
+
+                    $query = "INSERT INTO user (username, password, email, profile_picture) values (:Username, :Password, :Email, :ImagePath)";
                     $statement = $db->prepare($query); 
+                    $statement->bindValue(':ImagePath', $db->lastInsertId());
+                    $statement->bindValue(':Username', $username); 
+                    $statement->bindValue(':Password', $password);
+                    $statement->bindValue(':Email', $email);
+                    $statement->execute();
                 }
-
-                $statement->bindValue(':Username', $username); 
-                $statement->bindValue(':Password', $password);
-                $statement->bindValue(':Email', $email);
-
-                $statement->execute(); 
             }
         }
         else
@@ -88,11 +111,13 @@
     }    
 ?>
 
-<form class='login' method="post">
+<form class='login' method="post" enctype="multipart/form-data"> 
     <label for="username">Username:</label>
     <input type="text" id="username" name="username">
     <label for="password">Password:</label>
     <input type="password" id="password" name="password">
+    <label for="retype">Retype Password:</label>
+    <input type="password" id="retype" name="retype">
     <label for="email">Email Address:</label>
     <input type="text" id="email" name="email">
     <label for="image">Upload Profile Picture:</label>
@@ -103,7 +128,8 @@
             <p>Registration complete! Click <a href="login.php">here</a> to login</p>
         <?php elseif(!$validEntry) : ?>
             <p><?= $errorMessage ?></p>   
-        <?php else : ?>    
+        <?php endif ?>
+        <?php if($image_upload && !$validFile) : ?>    
             <p>Invalid file type.</p>
         <?php endif ?>
     <?php endif ?>

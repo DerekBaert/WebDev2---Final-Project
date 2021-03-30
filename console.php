@@ -24,6 +24,8 @@
             $pageOffset = 0;
         }
 
+        echo $pageOffset;
+
         if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
         {
             // Create array to send in initial post to gain an access token
@@ -58,7 +60,7 @@
                     fields id, name, parent_game, version_parent, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
                     sort name asc; 
                         where release_dates.platform = ' . $consoleId . ' & first_release_date != null; 
-                            limit 99; offset ' . $pageOffset .'; 
+                            limit 99; offset ' . $pageOffset . '; 
                 };';
         
         $post = array
@@ -81,7 +83,7 @@
     }     
 
     $pages = floor($games[0]['count'] / 100);
-    echo $pages;
+    //echo $pages;
 ?>        
         <div class="container" id="games">
             <h2><?=$console?></h2>

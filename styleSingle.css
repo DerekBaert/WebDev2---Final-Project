@@ -122,8 +122,7 @@ h4
             height: max-content;
             padding-top: 20px;
             margin: 10px auto 10px auto;
-        }
-        
+        }        
 
         .quickdata.description p
         {
@@ -150,15 +149,35 @@ h4
             color: rgba(255,255,255,.55);
         }
 
-        .quickdata.message .registerLogin a
+        .review
+        {
+            display: grid;
+        }
+
+        .reviewContent
+        {
+            margin-bottom: 10px;
+        }
+
+        .reviewFooter
+        {
+            align-self: flex-end;
+        }
+
+        .quickdata.message .registerLogin a, .review a
         {
             color: rgba(255,255,255,.55);
         }
         
-        .quickdata.message .registerLogin a:hover
+        .quickdata.message .registerLogin a:hover, .review a:hover
         {
             color: rgba(255, 255, 255, 0.342);
         }
+
+    .divider
+    {
+        color: #3F5E5A;
+    }
 
     .image
     {

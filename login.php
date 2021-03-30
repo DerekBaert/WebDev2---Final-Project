@@ -14,7 +14,7 @@
         $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
         
-        $query = "SELECT * FROM user WHERE username = :username AND password = :password";  
+        $query = "SELECT * FROM user JOIN user_images on user_images.id = user.profile_picture WHERE username = :username AND password = :password";  
         $statement = $db->prepare($query); 
 
         $bind_values = ['username' => $username, 'password' => $password];
@@ -29,7 +29,8 @@
             $_SESSION['user'] = [
                                     'id' => $row[0]['id'], 
                                     'role'=> $row[0]['account_type'], 
-                                    'username' => $username
+                                    'username' => $row[0]['username'],
+                                    'profile_picture' => $row[0]['thumbnail']
                                 ];
 
             ?>

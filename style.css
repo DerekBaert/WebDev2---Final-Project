@@ -238,7 +238,7 @@ h2
             color:rgba(255,255,255,.55);
         }
 
-    #username, #password, #email
+    #username, #password, #email, #retype
     {
         width: 75%;
         background-color: #6c757d;

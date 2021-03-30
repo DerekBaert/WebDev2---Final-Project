@@ -55,12 +55,12 @@
         $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
         $game = json_decode($json, true)[0];  
             
-        $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE game_id = " . $id;
+        $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE game_id = " . $id . " AND visible = 1";
         $statement = $db->prepare($query); 
         $statement->execute();
     }    
 
-    //var_dump($game);
+    //var_dump($statement->fetch());
 ?>
         <link href="styleSingle.css" rel="stylesheet">
         <div class="container" id="game">
@@ -76,20 +76,22 @@
                 <h4><?= $game['name']?></h4> 
             </div>            
             <div class="gameData">        
-                <div class="quickdata">                             
-                    <h5><span class="title">Genres:</span> <?=  commaList($game['genres'], 'name') ?> </h5>                          
+                <div class="quickdata">                       
+                    <?php if(isset($game['genres'])) : ?>      
+                        <h5><span class="title">Genres:</span> <?=  commaList($game['genres'], 'name') ?> </h5>          
+                    <?php else : ?>
+                        <h5><span class="title">Genres:</span> No Genres Listed </h5>
+                    <?php endif ?>
                     <h5><span class="title">Platforms: </span> <?= commaList($game['platforms'], 'name') ?> </h5>                        
                     <h5><span class="title">Average Score: </span> 10/10</h5>
                 </div>   
                 <div class="quickdata">      
-                    <h5><span class="title">Original Release: </span> <?= date('F d, Y', strtotime($game['first_release_date']))?></h5> 
+                    <h5><span class="title">Original Release: </span> <?= date('F d, Y', $game['first_release_date'])?></h5> 
                     <?php if(!array_key_exists('age_ratings', $game)): ?>
                         <h5><span class="title">Age Rating:</span> [Unrated]</h5>
                     <?php else: ?>
                         <h5><span class="title">Age Rating:</span> <?= getRating($game['age_ratings'][0]['rating']) ?></h5>
-                    <?php endif  ?>
-                    <h5><span class="title">Developer: </span>  </h5> 
-                    <h5><span class="title">Publisher: </span> </h5>                           
+                    <?php endif  ?>                        
                 </div>                                 
             </div>              
             <div class ="quickdata description">
@@ -119,17 +121,14 @@
                             </div>
                         </div>                        
                         <div class = "reviewContent">
-                        <?php if(strlen($row['review']) > 200) : ?>
-                            <p><?= substr($row['review'], 0, 200)?>...</p> 
-                        <?php else : ?>   
-                            <p><?=$row['review']?></p>
-                        <?php endif ?>                            
+                            <?php if(strlen($row['review']) > 200) : ?>
+                                <p><?= substr($row['review'], 0, 200)?>...</p> 
+                            <?php else : ?>   
+                                <p><?=$row['review']?></p>
+                            <?php endif ?>                                                        
                         </div>
                         <div class="reviewFooter">
-                            <a>All reviews from this user.</a>
-                        <?php if(strlen($row['review']) > 200) : ?>
-                            <a>Read full review.</a>
-                        <?php endif ?>
+                            <a href="userReviews.php?user=" . <?= $row['user_id']?>>All reviews from this user</a> <span class="divider">|</span> <a href="fullReview.php?review=" . <?= $row['id']?>>See full review</a>                            
                         </div>
                     </div>
                 <?php endwhile ?>
