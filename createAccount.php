@@ -70,7 +70,7 @@
                 if($validFile && $validEntry)
                 {
                     $imageQuery = "INSERT INTO user_images (original, thumbnail,  medium) values (:Original, :Thumbnail, :Medium)";
-                    $statement = $db->prepare($imageuery); 
+                    $statement = $db->prepare($imageQuery); 
                     $statement->bindValue(':Original', $imagePath);
                     $statement->bindValue(':Thumbnail', $withoutExt . '_Thumbnail' . '.' . $fileExtension);
                     $statement->bindValue(':Medium', $withoutExt . '_Medium' . '.' . $fileExtension);
@@ -87,7 +87,7 @@
                 else if($validEntry && !$image_upload)
                 {
                     $imageQuery = "INSERT INTO user_images (original, thumbnail,  medium) values (:Original, :Thumbnail, :Medium)";
-                    $statement = $db->prepare($imageuery); 
+                    $statement = $db->prepare($imageQuery); 
                     $statement->bindValue(':Original', 'Placeholder.png');
                     $statement->bindValue(':Thumbnail', 'Placeholder_Thumbnail.png');
                     $statement->bindValue(':Medium', 'Placeholder_Medium.png');

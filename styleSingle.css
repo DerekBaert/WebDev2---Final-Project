@@ -61,10 +61,16 @@ h4
         font-weight: lighter;
     }
 
-    .reviewHeader h5
+    .reviewHeader h5 a
     {
         color: #4c6672;
         font-weight: bold;
+        text-decoration: none;
+    }
+
+    .reviewHeader h5 a:hover
+    {
+        color: #4c726c;
     }
 
 .gameData, .reviews
@@ -164,12 +170,12 @@ h4
             align-self: flex-end;
         }
 
-        .quickdata.message .registerLogin a, .review a
+        .quickdata.message .registerLogin a, .reviewFooter a
         {
             color: rgba(255,255,255,.55);
         }
         
-        .quickdata.message .registerLogin a:hover, .review a:hover
+        .quickdata.message .registerLogin a:hover, .reviewFooter a:hover
         {
             color: rgba(255, 255, 255, 0.342);
         }

@@ -40,7 +40,7 @@
                     <a href="createAccount.php">Create Account</a>
                 <?php else : ?>
                     <img src="profile_images/<?=$_SESSION['user']['profile_picture']?>" alt="Profile Picture">
-                    <a href="user_profile.php"><?=$_SESSION['user']['username']?>'s Profile</a>
+                    <a href="user_profile.php?user=<?=$_SESSION['user']['id']?>"><?=$_SESSION['user']['username']?>'s Profile</a>
                     <a href="logout.php">Logout</a>
                 <?php endif ?>
             </div>

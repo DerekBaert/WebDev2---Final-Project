@@ -6,6 +6,12 @@
 
 <?php
     require 'header.php';
+
+
+    $query = "SELECT game_id FROM reviews JOIN user ON user.id = reviews.user_id WHERE date_posted > " . strtotime('-14 days') . " AND visible = 1";
+    $statement = $db->prepare($query); 
+    $statement->execute();
+    $row = $statement->fetchall();
 ?>
 
 

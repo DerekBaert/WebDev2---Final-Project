@@ -116,7 +116,7 @@
                         <div class= "reviewHeader">
                                 <h1><?=$row['score']?>/10</h1>
                             <div>
-                                <h5><?=$row['username']?></h5>
+                                <h5><a href="user_profile.php?user=<?=$row['user_id']?>"><?=$row['username']?></a></h5>
                                 <h6><?= date('F d, Y', strtotime($row['date_posted']))?></h6>
                             </div>
                         </div>                        

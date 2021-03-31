@@ -75,7 +75,6 @@ h2
     color:#6c757d;
 }
 
-
 .game, .platform
 {
     border: 1px solid #3f5e5a;
@@ -121,6 +120,79 @@ h2
     display: flex;
     flex-wrap: wrap;
 }
+
+.review
+    {
+        color: rgba(255,255,255,.55);
+        border: 1px solid #3f5e5a;
+        border-radius: 5px;
+        background-color: #212529;
+        width: 375px;
+        height: 200px;
+        padding: 20px;
+        padding-top: 15px;
+        display: flex;
+        margin: 5px;
+        flex-direction: column;
+    }
+
+.reviewHeader
+{
+    display: flex;
+    justify-content: space-between;    
+}
+
+    .reviewHeader h1
+    {
+        margin-right: 15px;
+        align-self: center;
+        color: #4c7262;
+        font-size: xx-large;
+    }
+
+    .reviewHeader h6, .reviewHeader h5
+    {
+        margin: 1px;
+        font-weight: lighter;
+    }
+
+    .reviewHeader h5 a
+    {
+        color: #4c6672;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .reviewHeader h5 a:hover
+    {
+        color: #4c726c;
+    }
+
+    .review
+    {
+        display: grid;
+    }
+
+    .reviewContent
+    {
+        margin-bottom: 10px;
+    }
+
+    .reviewFooter
+    {
+        align-self: flex-end;
+    }
+
+    .reviewFooter a
+    {
+        color: rgba(255,255,255,.55);
+    }
+    
+    .reviewFooter a:hover
+    {
+        color: rgba(255, 255, 255, 0.342);
+    }
+
 
 .btn-outline-success
 {
@@ -189,6 +261,12 @@ h2
     display: flex;
     flex-direction: row;
 }
+
+    .container.index
+    {
+        max-width: 500px;
+        margin-left: 0px;
+    }
 
 .login, .newReview
 {

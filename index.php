@@ -51,6 +51,12 @@
     $context  = stream_context_create($post);
     $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
     $games = json_decode($json, true); 
+
+    $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE date_posted > " . strtotime('-14 days') . " AND visible = 1";
+    $statement = $db->prepare($query); 
+    $statement->execute();
+
+    //var_dump($statement->fetchall());
 ?>
 
         <div class="container" id="indexContent">
@@ -80,11 +86,30 @@
             </div>
             <div class="container index">
                 <h2>Recent Reviews</h2> 
+                <?php while($row = $statement->fetch()) : ?>
+                    <div class="review">
+                        <div class= "reviewHeader">
+                                <h1><?=$row['score']?>/10</h1>
+                            <div>
+                                <h5><a href="user_profile.php?user=<?=$row['user_id']?>"><?=$row['username']?></a></h5>
+                                <h6><?= date('F d, Y', strtotime($row['date_posted']))?></h6>
+                            </div>
+                        </div>                        
+                        <div class = "reviewContent">
+                            <?php if(strlen($row['review']) > 200) : ?>
+                                <p><?= substr($row['review'], 0, 200)?>...</p> 
+                            <?php else : ?>   
+                                <p><?=$row['review']?></p>
+                            <?php endif ?>                                                        
+                        </div>
+                        <div class="reviewFooter">
+                            <a href="userReviews.php?user=" . <?= $row['user_id']?>>All reviews from this user</a> <span class="divider">|</span> <a href="fullReview.php?review=" . <?= $row['id']?>>See full review</a>                            
+                        </div>
+                    </div>
+                <?php endwhile ?>
             </div>
-        </div>        
+        </div>               
         
-
-
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     </body>    
