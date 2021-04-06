@@ -75,7 +75,7 @@ h2
     color:#6c757d;
 }
 
-.game, .platform
+.game, .platform, .container.userInfo
 {
     border: 1px solid #3f5e5a;
     border-radius: 5px;  
@@ -88,13 +88,25 @@ h2
     background-color: #212529;
 }
 
+.container.userInfo
+{
+    flex-direction: row;
+    
+}
+
+.title
+{
+    color: #3F5E5A;
+    font-weight: bold;
+}
+
 .platform
 {
     width: 300px;
     flex-direction: column;
 }
 
-    .quickdata
+    .quickdata, .userData
     {
         margin-top: 10px;
         margin-left: 10px;
@@ -119,6 +131,17 @@ h2
 {
     display: flex;
     flex-wrap: wrap;
+}
+
+
+.reviews
+{    
+    display: flex;    
+    margin: 10px auto 10px auto;
+    padding: 10px;
+    width: 1200px;
+    align-items: center;
+    justify-content: flex-start;
 }
 
 .review

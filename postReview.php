@@ -15,6 +15,10 @@
         $statement->bindValue(':Review', $review);
         $statement->bindValue(':Score', $score);
         $statement->execute(); 
+
+        $query = "UPDATE user SET number_of_reviews = number_of_reviews + 1 WHERE id = " . $_SESSION['user']['id'];
+        $statement = $db->prepare($query); 
+        $statement->execute();
     }
 ?>
 

@@ -55,7 +55,7 @@
         $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
         $game = json_decode($json, true)[0];  
             
-        $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE game_id = " . $id . " AND visible = 1";
+        $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE game_id = " . $id . " AND visible = 1 ORDER BY date_posted DESC";
         $statement = $db->prepare($query); 
         $statement->execute();
     }    
@@ -128,7 +128,7 @@
                             <?php endif ?>                                                        
                         </div>
                         <div class="reviewFooter">
-                            <a href="userReviews.php?user=" . <?= $row['user_id']?>>All reviews from this user</a> <span class="divider">|</span> <a href="fullReview.php?review=" . <?= $row['id']?>>See full review</a>                            
+                            </span> <a href="fullReview.php?review=" . <?= $row['id']?>>See full review</a>                            
                         </div>
                     </div>
                 <?php endwhile ?>

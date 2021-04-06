@@ -57,6 +57,8 @@
     $statement->execute();
 
     //var_dump($statement->fetchall());
+
+    // var_dump($_SESSION['user']);
 ?>
 
         <div class="container" id="indexContent">
@@ -103,7 +105,7 @@
                             <?php endif ?>                                                        
                         </div>
                         <div class="reviewFooter">
-                            <a href="userReviews.php?user=" . <?= $row['user_id']?>>All reviews from this user</a> <span class="divider">|</span> <a href="fullReview.php?review=" . <?= $row['id']?>>See full review</a>                            
+                            </span> <a href="fullReview.php?review=<?= $row['id']?>">See full review</a>                            
                         </div>
                     </div>
                 <?php endwhile ?>

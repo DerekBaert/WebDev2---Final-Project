@@ -35,7 +35,7 @@
                 $image = new ImageResize($new_image_path);
                 $image->resizeToWidth(75);
                 $image->save(file_upload_path($withoutExt . '_Thumbnail' . '.' . $fileExtension));  
-                $imagePath = $withoutExt . '_Thumbnail' . '.' . $fileExtension;
+                $imagePath = $withoutExt . '.' . $fileExtension;
                 $validFile = true;
             }
             else
