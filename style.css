@@ -41,6 +41,13 @@ h1, h2
             color: rgba(255,255,255,.55);
         }
 
+.userImage
+{
+    width: 50%;
+    color: rgba(255,255,255,.55);
+    font-size: 1em;
+}
+
 h2
 {
     margin-top: 10px;
