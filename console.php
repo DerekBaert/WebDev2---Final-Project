@@ -85,6 +85,16 @@
 ?>        
         <div class="container" id="games">
             <h2><?=$console?></h2>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                <?php if($pageOffset == 0) :?>
+                    <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Previous</a></li>
+                <?php else : ?>
+                    <li class="page-item" id="previousButton"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
+                <?php endif?>
+                    <li class="page-item" id="nextButton"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
+                </ul>
+            </nav>
             <?php foreach ($games as $game): ?>
                 <?php if(array_key_exists('first_release_date', $game)): ?>
                     <?php if(!isset($game['parent_game']) && !isset($game['version_parent'])) : ?>
@@ -119,17 +129,17 @@
                     <?php endif ?>
                 <?php endif ?>
             <?php endforeach ?>
-        </div>  
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-            <?php if($pageOffset == 0) :?>
-                <li class="page-item disabled"><a class="page-link" href="console.php">Previous</a></li>
-            <?php else : ?>
-                <li class="page-item"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
-            <?php endif?>
-                <li class="page-item"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
-            </ul>
-        </nav>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                <?php if($pageOffset == 0) :?>
+                    <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Previous</a></li>
+                <?php else : ?>
+                    <li class="page-item" id="previousButton"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
+                <?php endif?>
+                    <li class="page-item" id="nextButton"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
+                </ul>
+            </nav>
+        </div>        
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>

@@ -398,3 +398,35 @@ h2
     {
         color: #353831;
     }
+
+    .pagination
+    {
+        justify-content: center;
+    }
+
+    #games nav
+    {
+        width: 100%;
+    }
+
+    #previousButton a, #nextButton a
+    {
+        border-color: #3f5e5a;
+        color: rgba(255,255,255,.55);
+        background-color: #212529;
+    }
+
+    #previousButton a:hover, #nextButton a:hover
+    {
+        color: #5e7774;
+    }
+
+    #previousButton a:active, #nextButton a:active
+    {
+        color: #353831;
+    }
+
+    #previousButton.page-item.disabled a
+    {
+        color: rgba(129, 129, 129, 0.55);
+    }
