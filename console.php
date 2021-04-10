@@ -15,16 +15,12 @@
         require 'ProjectFunctions.php';
         require 'header.php';
 
+        $pageOffset = 0;
+
         if(isset($_GET['offset']))
         {
             $pageOffset = FILTER_INPUT(INPUT_GET, 'offset', FILTER_VALIDATE_INT);
         }
-        else
-        {
-            $pageOffset = 0;
-        }
-
-        echo $pageOffset;
 
         if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
         {
@@ -49,8 +45,8 @@
                     'Authorization: Bearer ' .  $token
                 );
 
-        //$body = 'fields date, game.*; where date > ' . strtotime('-14 days') . ';';
-        $body = 'query games/count "Count" 
+
+        /*$body = 'query games/count "Count" 
                 {
                     where release_dates.platform = ' . $consoleId . ' & first_release_date != null;
                 };' .
@@ -61,7 +57,12 @@
                     sort name asc; 
                         where release_dates.platform = ' . $consoleId . ' & first_release_date != null; 
                             limit 99; offset ' . $pageOffset . '; 
-                };';
+                };';*/
+
+                $body = "fields id, name, parent_game, version_parent, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
+                sort name asc; 
+                    where release_dates.platform = {$consoleId}; 
+                        limit 99; offset {$pageOffset};";
         
         $post = array
         ('http' =>
@@ -74,20 +75,17 @@
         );
 
         $context  = stream_context_create($post);
-        $json = file_get_contents('https://api.igdb.com/v4/multiquery', false, $context);
+        $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
         $games = json_decode($json, true);     
     }  
     else
     {
         header("Location: index.php");
     }     
-
-    $pages = floor($games[0]['count'] / 100);
-    //echo $pages;
 ?>        
         <div class="container" id="games">
             <h2><?=$console?></h2>
-            <?php foreach ($games[1]['result'] as $game): ?>
+            <?php foreach ($games as $game): ?>
                 <?php if(array_key_exists('first_release_date', $game)): ?>
                     <?php if(!isset($game['parent_game']) && !isset($game['version_parent'])) : ?>
                         <div class="game">
@@ -124,15 +122,12 @@
         </div>  
         <nav aria-label="Page navigation example">
             <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="console.php">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="console.php">1</a></li>
-                <li class="page-item"><a class="page-link" href="console.php?offset=100">2</a></li>
-                <li class="page-item"><a class="page-link" href="console.php?offset=200">3</a></li>
-                <li class="page-item"><a class="page-link">...</a></li>
-                <li class="page-item"><a class="page-link" href="console.php"><?=$pages - 2?></a></li>
-                <li class="page-item"><a class="page-link" href="console.php"><?=$pages - 1?></a></li>
-                <li class="page-item"><a class="page-link" href="v"><?=$pages?></a></li>
-                <li class="page-item"><a class="page-link" href="console.php">Next</a></li>
+            <?php if($pageOffset == 0) :?>
+                <li class="page-item disabled"><a class="page-link" href="console.php">Previous</a></li>
+            <?php else : ?>
+                <li class="page-item"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
+            <?php endif?>
+                <li class="page-item"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
             </ul>
         </nav>
 

@@ -17,7 +17,7 @@
         if ($image_upload) 
         {
             $temp                 = explode(".", $_FILES["profile"]["name"]);     
-            $image_filename       = round(microtime(true)) . '.' . end($temp);;
+            $image_filename       = round(microtime()) . '.' . end($temp);;
             $temporary_path       = $_FILES['profile']['tmp_name'];
             $new_image_path       = file_upload_path($image_filename);            
 
@@ -79,23 +79,16 @@
                     $query = "INSERT INTO user (username, password, email, profile_picture) values (:Username, :Password, :Email, :ImagePath)";
                     $statement = $db->prepare($query); 
                     $statement->bindValue(':ImagePath', $db->lastInsertId());
-                    $statement->bindValue(':Username', $username); 
+                    $statement->bindValue(':Username', $username);
                     $statement->bindValue(':Password', $password);
                     $statement->bindValue(':Email', $email);
                     $statement->execute();
                 }
                 else if($validEntry && !$image_upload)
                 {
-                    $imageQuery = "INSERT INTO user_images (original, thumbnail,  medium) values (:Original, :Thumbnail, :Medium)";
-                    $statement = $db->prepare($imageQuery); 
-                    $statement->bindValue(':Original', 'Placeholder.png');
-                    $statement->bindValue(':Thumbnail', 'Placeholder_Thumbnail.png');
-                    $statement->bindValue(':Medium', 'Placeholder_Medium.png');
-                    $statement->execute();
-
                     $query = "INSERT INTO user (username, password, email, profile_picture) values (:Username, :Password, :Email, :ImagePath)";
                     $statement = $db->prepare($query); 
-                    $statement->bindValue(':ImagePath', $db->lastInsertId());
+                    $statement->bindValue(':ImagePath', 3);
                     $statement->bindValue(':Username', $username); 
                     $statement->bindValue(':Password', $password);
                     $statement->bindValue(':Email', $email);
