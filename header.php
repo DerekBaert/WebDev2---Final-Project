@@ -7,6 +7,7 @@
 
     $platformSearch = false;
     $adminUser = false;
+    $owner = false;
 
     if(!isset($db))
     {
@@ -42,10 +43,15 @@
 
     if(isset($_SESSION['user']))
     {
-        if($_SESSION['user']['role'] == 1 || $_SESSION['user']['role'] == 2)
+        if($_SESSION['user']['role'] == 2)
         {
             $adminUser = true;
         }        
+        else if($_SESSION['user']['role'] == 1)
+        {
+            $adminUser = true;
+            $owner = true;
+        }
     }
 ?>
 <!doctype html>

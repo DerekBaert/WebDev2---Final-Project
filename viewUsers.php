@@ -3,7 +3,6 @@
     require 'header.php';
     require 'ProjectFunctions.php';
 
-
     $query = "SELECT * FROM user";  
     $statement = $db->prepare($query); 
 
@@ -29,10 +28,10 @@
                     <td><?=$row['email']?></td>
                     <td><?=$row['number_of_reviews']?></td>
                     <td><?=findAccountType($row['account_type'])?></td>
-                    <?php if($row['account_type'] != 1) : ?>
+                    <?php if($row['account_type'] == 3 || $row['account_type'] == 4 || ($row['account_type'] == 2 && $owner)) : ?>
                         <td>
                             <select>
-                                <?php if($_SESSION['role'] == 1) : ?>
+                                <?php if($owner) : ?>
                                     <option>Administrator</option>
                                 <?php endif ?>
                                 <option>User</option>
@@ -40,7 +39,7 @@
                             </select>
                             <button class="btn btn-outline-success" type="submit">Submit</button>
                         </td>
-                    <?php else : ?>
+                    <?php else : ?> 
                         <td></td>
                     <?php endif ?> 
                 </tr>
