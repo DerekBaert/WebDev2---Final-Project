@@ -6,6 +6,11 @@
 
 <?php
     session_start();
+
+    if($_POST && empty($_POST['search']))
+    {
+        header('Location: index.php');
+    }
     require 'header.php';
     require 'ProjectFunctions.php';    
 
@@ -110,10 +115,28 @@
     $context  = stream_context_create($post);
     $json = file_get_contents($url, false, $context);
     $results = json_decode($json, true);  
+
+    $noResults = "";
+
+    if(count($results) == 0)
+    {
+        if($_GET)
+        {
+            $noResults = "No more results for \"{$search}\"";
+        }
+        else if($_POST)
+        {
+            $noResults = "No results for \"{$search}\"";
+        }
+    }
 ?>
 
 <div class="container" id="games">
-    <h2>Results for "<?=$search?>" </h2>
+    <?php if(count($results) != 0) : ?>
+        <h2>Results for "<?=$search?>" </h2>
+    <?php else : ?>
+        <h2><?= $noResults ?></h2>
+    <?php endif ?>
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <?php if($pageOffset == 0) :?>

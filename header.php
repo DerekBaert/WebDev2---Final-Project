@@ -17,10 +17,24 @@
         catch (PDOException $e) 
         {
             print "Error: " . $e->getMessage();
-            die(); // Force execution to stop on errors.
+            die(); 
         }
     }
+
+    $platformSearch = false;
+
+    if($_POST)
+    {
+        if(isset($_POST['category']))
+        {
+            $category = FILTER_INPUT(INPUT_GET, 'category', FILTER_SANITIZE_STRING);
     
+            if($category == "platform")
+            {
+                $platformSearch = true;
+            }
+        }
+    }    
 ?>
 <!doctype html>
 <html lang="en">
@@ -81,11 +95,18 @@
                     </li>                    
                 </ul>
                 <form class="d-flex" method='post' action='search.php'>
-                    <input class="form-control me-2" name='search' id='search' type="search" placeholder="Search by game or platform..." aria-label="Search">\
-                    <input type="radio" id="gameRadio" name="category" value="game" checked="checked">
-                    <label for="gameRadio" class='radio-label'>Game</label><br>
-                    <input type="radio" id="platformRadio" name="category" value="platform">
-                    <label for="platformRadio" class='radio-label'>Platform</label><br> 
+                    <input class="form-control me-2" name='search' id='search' type="search" placeholder="Search by game or platform..." aria-label="Search">
+                    <?php if(!$platformSearch) :?>
+                        <input type="radio" id="gameRadio" name="category" value="game" checked="checked">
+                        <label for="gameRadio" class='radio-label'>Game</label><br>
+                        <input type="radio" id="platformRadio" name="category" value="platform">
+                        <label for="platformRadio" class='radio-label'>Platform</label><br> 
+                    <?php else : ?>
+                        <input type="radio" id="gameRadio" name="category" value="game">
+                        <label for="gameRadio" class='radio-label'>Game</label><br>
+                        <input type="radio" id="platformRadio" name="category" value="platform" checked="checked">
+                        <label for="platformRadio" class='radio-label'>Platform</label><br>
+                    <?php endif ?>
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 </div>
