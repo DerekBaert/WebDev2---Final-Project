@@ -46,23 +46,24 @@
                 );
 
 
-        /*$body = 'query games/count "Count" 
-                {
-                    where release_dates.platform = ' . $consoleId . ' & first_release_date != null;
-                };' .
+        $body = 
+        "query games/count \"Count\" 
+        {
+            where release_dates.platform = {$consoleId};
+        };
 
-                'query games "Games" 
-                {
-                    fields id, name, parent_game, version_parent, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
-                    sort name asc; 
-                        where release_dates.platform = ' . $consoleId . ' & first_release_date != null; 
-                            limit 99; offset ' . $pageOffset . '; 
-                };';*/
-
-                $body = "fields id, name, parent_game, version_parent, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
+        query games \"Games\" 
+        {
+            fields id, name, parent_game, version_parent, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
                 sort name asc; 
                     where release_dates.platform = {$consoleId}; 
-                        limit 99; offset {$pageOffset};";
+                        limit 99; offset {$pageOffset}; 
+        };";
+
+        /*$body = "fields id, name, parent_game, version_parent, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
+                    sort name asc; 
+                        where release_dates.platform = {$consoleId}; 
+                            limit 99; offset {$pageOffset};";*/
         
         $post = array
         ('http' =>
@@ -75,13 +76,17 @@
         );
 
         $context  = stream_context_create($post);
-        $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
+        $json = file_get_contents('https://api.igdb.com/v4/multiquery', false, $context);
         $games = json_decode($json, true);     
     }  
     else
     {
         header("Location: index.php");
     }     
+
+    //var_dump($games[0]['count']);
+    //var_dump($games[1]['result']);
+    $count = $games[0]['count'];
 ?>        
         <div class="container" id="games">
             <h2><?=$console?></h2>
@@ -95,7 +100,7 @@
                     <li class="page-item" id="nextButton"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
                 </ul>
             </nav>
-            <?php foreach ($games as $game): ?>
+            <?php foreach ($games[1]['result'] as $game): ?>
                 <?php if(array_key_exists('first_release_date', $game)): ?>
                     <?php if(!isset($game['parent_game']) && !isset($game['version_parent'])) : ?>
                         <div class="game">
@@ -136,7 +141,11 @@
                 <?php else : ?>
                     <li class="page-item" id="previousButton"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
                 <?php endif?>
+                <?php if($pageOffset >= $count) : ?>
+                    <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Next</a></li>
+                <?php else : ?>
                     <li class="page-item" id="nextButton"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
+                <?php endif ?>
                 </ul>
             </nav>
         </div>        
