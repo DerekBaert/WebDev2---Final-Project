@@ -1,5 +1,27 @@
 <?php    
 
+    function findAccountType($type)
+    {   
+        $accountType = "";
+        switch($type)
+        {
+            case 1:
+                $accountType = "Owner";
+                break;
+            case 2:
+                $accountType = "Administrator";
+                break;
+            case 3:
+                $accountType = "User";
+                break;
+            case 4:
+                $accountType = "Suspended";
+                break;               
+        }
+
+        return $accountType;
+    }
+
     function file_upload_path($originalFilename, $uploadSubfolder = 'profile_images') 
     {
         $currentFolder = dirname(__FILE__);

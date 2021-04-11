@@ -4,6 +4,10 @@
  * File: Header for all pages
  ------------>
 <?php    
+
+    $platformSearch = false;
+    $adminUser = false;
+
     if(!isset($db))
     {
         define('DB_DSN','mysql:host=localhost;dbname=reviewbase');
@@ -21,7 +25,6 @@
         }
     }
 
-    $platformSearch = false;
 
     if($_POST)
     {
@@ -35,6 +38,15 @@
             }
         }
     }    
+
+
+    if(isset($_SESSION['user']))
+    {
+        if($_SESSION['user']['role'] == 1 || $_SESSION['user']['role'] == 2)
+        {
+            $adminUser = true;
+        }        
+    }
 ?>
 <!doctype html>
 <html lang="en">
@@ -71,10 +83,10 @@
                         <a class="nav-link" href="index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="newReleases.php">New Releases</a>
+                        <a class="nav-link" href="newReleases.php">New Releases</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" href="recentlyReviewed.php">Recently Reviewed</a>
+                        <a class="nav-link" href="recentlyReviewed.php">Recently Reviewed</a>
                     </li>
                     <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Platform</a>
@@ -89,10 +101,15 @@
                         <li><a class="dropdown-item" href="console.php?id=130&name=Nintendo%20Switch">Nintendo Switch</a></li>
                         <li class="dropdown-header">PC</li>                             
                         <li><a class="dropdown-item" href="console.php?id=6&name=Windows">Windows</a></li> 
-                        <li><hr class="dropdown-divider" style="background-color:#6c757d;"></li>
-                        <li><a class="dropdown-item" href="#">All Platforms</a></li> 
+                        <!--<li><hr class="dropdown-divider" style="background-color:#6c757d;"></li>
+                        <li><a class="dropdown-item" href="#">All Platforms</a></li> -->
                     </ul>
-                    </li>                    
+                    </li>   
+                    <?php if($adminUser) : ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="viewUsers.php">Users</a>
+                        </li>      
+                    <?php endif ?>           
                 </ul>
                 <form class="d-flex" method='post' action='search.php'>
                     <input class="form-control me-2" name='search' id='search' type="search" placeholder="Search by game or platform..." aria-label="Search">
