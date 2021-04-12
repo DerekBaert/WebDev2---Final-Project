@@ -8,7 +8,22 @@
 
     $statement->execute();
 
-    $statement->execute();
+    if($_POST)
+    {
+        $newRole = filter_input(INPUT_POST, "roleUpdate", FILTER_VALIDATE_INT);
+        $userId = filter_input(INPUT_POST, "userId", FILTER_VALIDATE_INT);
+
+        $updateQuery = "UPDATE user SET account_type = :NewRole WHERE id = :UserId";
+        $statement = $db->prepare($updateQuery);
+        $statement->bindValue(':NewRole', $newRole);
+        $statement->bindValue(':UserId', $userId); 
+        $statement->execute();
+
+        $query = "SELECT * FROM user";  
+        $statement = $db->prepare($query); 
+
+        $statement->execute();
+    }
 ?>
 <div class="container">
     <table class="table">
@@ -30,15 +45,19 @@
                     <td><?=findAccountType($row['account_type'])?></td>
                     <?php if($row['account_type'] == 3 || $row['account_type'] == 4 || ($row['account_type'] == 2 && $owner)) : ?>
                         <td>
-                            <select>
-                                <?php if($owner) : ?>
-                                    <option>Administrator</option>
-                                <?php endif ?>
-                                <option>User</option>
-                                <option>Suspended</option>
-                            </select>
-                            <button class="btn btn-outline-success" type="submit">Submit</button>
-                        </td>
+                            <form method="post">
+                                <select name="roleUpdate" id="roleUpdate">
+                                    <option disabled selected value>Select an option</option>
+                                    <?php if($owner) : ?>
+                                        <option value="2">Administrator</option>
+                                    <?php endif ?>
+                                    <option value="3">User</option>
+                                    <option value="4">Suspended</option>
+                                </select>
+                                <input type="hidden" name="userId" value="<?=$row['id']?>">
+                                <button class="btn btn-outline-success" type="submit">Submit</button>
+                            </form>
+                        </td>                        
                     <?php else : ?> 
                         <td></td>
                     <?php endif ?> 

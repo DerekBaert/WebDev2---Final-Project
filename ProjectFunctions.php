@@ -1,5 +1,24 @@
 <?php    
 
+
+    function connect()
+    {
+        define('DB_DSN','mysql:host=localhost;dbname=reviewbase');
+        define('DB_USER','UserConnect');
+        define('DB_PASS','Password01');
+
+        try 
+        {
+            $db = new PDO(DB_DSN, DB_USER, DB_PASS);
+            return $db;
+        } 
+        catch (PDOException $e) 
+        {
+            print "Error: " . $e->getMessage();
+            die(); 
+        }        
+    }
+
     function findAccountType($type)
     {   
         $accountType = "";

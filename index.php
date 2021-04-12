@@ -105,7 +105,7 @@
                             <?php endif ?>                                                        
                         </div>
                         <div class="reviewFooter">
-                            </span> <a href="fullReview.php?review=<?= $row['id']?>">See full review</a>                            
+                            </span> <a href="fullReview.php?review=<?= $row['id']?>&game=<?=$row['game_id']?>">See full review</a>                            
                         </div>
                     </div>
                 <?php endwhile ?>

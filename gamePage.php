@@ -99,10 +99,16 @@
             </div>            
             <div class="addReview"> 
                 <?php if(isset($_SESSION['user'])) : ?>
-                    <form action="postReview.php">                  
-                        <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
-                        <input type="submit" name = <?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
-                    </form>   
+                    <?php if($_SESSION['user']['role'] != 4) : ?>
+                        <form action="postReview.php">                  
+                            <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
+                            <input type="submit" name = <?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
+                        </form> 
+                    <?php else :?>  
+                        <div class ="quickdata message">
+                            <p>Your account has been suspended, you cannot post reviews.</p>
+                        </div> 
+                    <?php endif ?>
                 <?php else: ?>
                     <div class ="quickdata message">
                         <p>Must be a registered user to post reviews.</p>
@@ -128,7 +134,7 @@
                             <?php endif ?>                                                        
                         </div>
                         <div class="reviewFooter">
-                            </span> <a href="fullReview.php?review=" . <?= $row['id']?>>See full review</a>                            
+                            </span> <a href="fullReview.php?review=<?= $row['id']?>&game=<?=$row['game_id']?>">See full review</a>                            
                         </div>
                     </div>
                 <?php endwhile ?>

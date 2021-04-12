@@ -19,10 +19,20 @@ h4
     font-weight: bold;
 }
 
-.page-header 
+.page-header
 {
-    margin-left: 5%;
+    width: 1320px;
+    padding-right: var(--bs-gutter-x,.75rem);
+    padding-left: var(--bs-gutter-x,.75rem);
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
 }
+
+    .page-header h1
+    {
+        width: 90%;
+    }
 
 .dropdown-menu.show, .dropdown-menu li
 {
@@ -83,6 +93,16 @@ h4
     justify-content: flex-start;
 }
 
+.fullReview
+{
+    display: flex;    
+    margin: 10px auto 10px auto;
+    padding: 10px;
+    width: 1200px;
+    align-items: center;
+    justify-content: center;
+}
+    
     .review
     {
         color: rgba(255,255,255,.55);
@@ -204,11 +224,37 @@ h4
 #game
 {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
 }
+
+    #game.container.gameData
+    {
+        align-content: space-between;
+    }
+
+    .image.reviewPage
+    {
+        display: flex;
+        margin: 10px;
+        width: 30%;
+        border: none;
+    }
+
+        .image.reviewPage img
+        {
+            margin: 0px;
+            margin-left: 20%;
+        }
+
+    .gameData.reviewPage
+    {
+        flex-direction: column;
+        width: 50%;
+        margin-right: 10%;
+    }
 
 .btn-outline-success
 {

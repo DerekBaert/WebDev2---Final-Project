@@ -29,7 +29,7 @@
                 $fileExtension   = pathinfo($image_filename, PATHINFO_EXTENSION);
 
                 $image = new ImageResize($new_image_path);
-                $image->resizeToWidth(400);
+                $image->resizeToWidth(100);
                 $image->save(file_upload_path($withoutExt . '_Medium' . '.' . $fileExtension));  
 
                 $image = new ImageResize($new_image_path);
@@ -86,10 +86,17 @@
                 }
                 else if($validEntry && !$image_upload)
                 {
+                    $imageQuery = "INSERT INTO user_images (original, thumbnail,  medium) values (:Original, :Thumbnail, :Medium)";
+                    $statement = $db->prepare($imageQuery); 
+                    $statement->bindValue(':Original', "Placeholder.png");
+                    $statement->bindValue(':Thumbnail', "Placeholder_Thumbnail.png");
+                    $statement->bindValue(':Medium', "Placeholder_Medium.png");
+                    $statement->execute();
+
                     $query = "INSERT INTO user (username, password, email, profile_picture) values (:Username, :Password, :Email, :ImagePath)";
                     $statement = $db->prepare($query); 
-                    $statement->bindValue(':ImagePath', 3);
-                    $statement->bindValue(':Username', $username); 
+                    $statement->bindValue(':ImagePath', $db->lastInsertId());
+                    $statement->bindValue(':Username', $username);
                     $statement->bindValue(':Password', $password);
                     $statement->bindValue(':Email', $email);
                     $statement->execute();
@@ -117,7 +124,7 @@
     <input type="file" id="profile" name="profile">
     <input type="submit" value="Create Account" id="submitLogin">
     <?php if($_POST) : ?>
-        <?php if($validEntry && $validFile) : ?>
+        <?php if($validEntry) : ?>
             <p>Registration complete! Click <a href="login.php">here</a> to login</p>
         <?php elseif(!$validEntry) : ?>
             <p><?= $errorMessage ?></p>   

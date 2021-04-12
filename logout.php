@@ -1,9 +1,6 @@
 <?php
     session_start();
     unset($_SESSION['user']);   
+    header("Location: index.php");
 ?>
-
-<script type="text/javascript">
-    window.location.href = 'index.php';
-</script>
 

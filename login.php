@@ -4,15 +4,20 @@
     // If rowcount = 1, user logs in
     // Store username, role and id in SESSION
     // if session[user] isset, display logout (unset(session[user]))
-
     session_start();
     require 'ProjectFunctions.php';
-    require 'header.php'; 
-    
     if($_POST)
     {
+        if(!isset($db))
+        {
+            $db = connect();
+        }
+
         $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        //$loginRedirect = filter_input(INPUT_POST, 'redirect', FILTER_SANITIZE_URL);
+
+        //echo $loginRedirect;
         
         $query = "SELECT user.id, user.account_type, user.username, user_images.thumbnail FROM user JOIN user_images on user_images.id = user.profile_picture WHERE username = :username AND password = :password";  
         $statement = $db->prepare($query); 
@@ -32,14 +37,15 @@
                                     'username' => $row[0]['username'],
                                     'profile_picture' => $row[0]['thumbnail']
                                 ];
-            ?>
-            <script type="text/javascript">
-                window.location.href = 'index.php';
-            </script>
-            <?php
+            header("Location: index.php");             
         }        
     }  
-       
+
+
+    require 'header.php'; 
+    
+    //$redirect = $_SERVER['HTTP_REFERER'];   
+    //echo $redirect;
 ?>
 
 <form class='login' method="post">
@@ -47,6 +53,7 @@
     <input type="text" id="username" name="username">
     <label for="password">Password:</label>
     <input type="password" id="password" name="password">
+    <input type="hidden" id="redirect" name="redirect">
     <button type="submit" class="btn btn-outline-success">Login</button>
         <?php if($_POST) : ?>
             <?php if(count($row) == 0) :?>
