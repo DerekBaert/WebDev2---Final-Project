@@ -1,12 +1,37 @@
 <?php    
 
+    function reviewAverage($gameId, $db)
+    {
+        $query = "SELECT score FROM reviews WHERE game_id = :GameId";
+        $statement = $db->prepare($query);
+        $statement->bindValue(":GameId", $gameId);
+        $statement->execute();
+        $scores = $statement->fetchAll();
+
+        $sum = 0;
+
+        foreach($scores as $score)
+        {
+            $sum .= $score['score'];
+        }
+
+        if($sum != 0)
+        {
+            $average = ($sum / count($scores)) . "/10";
+        }
+        else
+        {
+            $average = "Unrated";
+        }
+        return $average;
+    }
 
     function connect()
     {
         define('DB_DSN','mysql:host=localhost;dbname=reviewbase');
         define('DB_USER','UserConnect');
         define('DB_PASS','Password01');
-
+    
         try 
         {
             $db = new PDO(DB_DSN, DB_USER, DB_PASS);
@@ -16,7 +41,7 @@
         {
             print "Error: " . $e->getMessage();
             die(); 
-        }        
+        }           
     }
 
     function findAccountType($type)

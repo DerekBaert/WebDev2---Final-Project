@@ -75,7 +75,7 @@
                         <div class="quickdata">
                             <h4><?= $game['name']?></h4>
                             <h5>Release Date: <?= date('F d, Y', $game['first_release_date'])?></h5>   
-                            <h5>Average Score: 10/10</h5>
+                            <h5>Average Score: <?=reviewAverage($game['id'], $db)?></h5>
                         </div>
                         <div class="addReview"> 
                             <form action="gamePage.php" method="post">  

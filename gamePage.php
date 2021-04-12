@@ -8,7 +8,7 @@
     session_start();
     require 'header.php';
     require 'ProjectFunctions.php';    
-
+    $order = "date_posted ASC";
     if($_POST)
     {
         $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);                
@@ -53,10 +53,22 @@
         $context  = stream_context_create($post);
         $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
         $game = json_decode($json, true)[0];  
+
+        if(isset($_POST['order']))
+        {
+            $order = filter_input(INPUT_POST, "order", FILTER_SANITIZE_STRING);
+        }
             
-        $query = "SELECT  r.id AS id, r.review AS review, r.score AS score, r.user_id AS user_id, r.game_id AS game_id, r.date_posted AS date_posted, u.username AS username FROM reviews r JOIN user u ON u.id = user_id WHERE date_posted > " . strtotime('-14 days') . " AND visible = 1";
+        $query= "SELECT  r.id AS id, r.review AS review, r.score AS score, r.user_id AS user_id, r.game_id AS game_id, r.date_posted AS date_posted, u.username AS username 
+                 FROM reviews r 
+                 JOIN user u ON u.id = user_id
+                 WHERE game_id = :GameId AND visible = 1
+                 ORDER BY :Order";
+
         $statement = $db->prepare($query); 
-        $statement->execute();
+        $statement->bindValue(":GameId", $id);
+        $statement->bindValue(":Order", $order);
+        $statement->execute();        
     }    
 
     //var_dump($statement->fetch());
@@ -82,7 +94,7 @@
                         <h5><span class="title">Genres:</span> No Genres Listed </h5>
                     <?php endif ?>
                     <h5><span class="title">Platforms: </span> <?= commaList($game['platforms'], 'name') ?> </h5>                        
-                    <h5><span class="title">Average Score: </span> 10/10</h5>
+                    <h5><span class="title">Average Score: </span> <?=reviewAverage($game['id'], $db)?></h5>
                 </div>   
                 <div class="quickdata">      
                     <h5><span class="title">Original Release: </span> <?= date('F d, Y', $game['first_release_date'])?></h5> 
@@ -99,9 +111,9 @@
             <div class="addReview"> 
                 <?php if(isset($_SESSION['user'])) : ?>
                     <?php if($_SESSION['user']['role'] != 4) : ?>
-                        <form action="postReview.php">                  
+                        <form action="postReview.php" method=post class="postReview">                  
                             <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
-                            <input type="submit" name = <?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
+                            <input type="submit" name=<?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
                         </form> 
                     <?php else :?>  
                         <div class ="quickdata message">
@@ -113,8 +125,18 @@
                         <p>Must be a registered user to post reviews.</p>
                         <p class='registerLogin'><a href='createAccount.php'>Register</a> or <a href='login.php'>Login</a> here.</p>
                     </div>                    
-                <?php endif ?>                     
-            </div> 
+                <?php endif ?>      
+                <form class="changeOrder" action="gamePage.php" method="post">
+                    <select name="order" id="order">
+                        <option value="date_posted ASC">Date Posted Ascending</option>
+                        <option value="date_posted DESC">Date Posted Descending</option>
+                        <option value="score ASC">Review Score Ascending</option>
+                        <option value="score DESC">Review Score Descending</option>
+                    </select>
+                    <input type="hidden" name="id" value="<?= $game['id'] ?>">
+                    <input type="submit" name=<?= $game['id'] ?> class="btn btn-primary" value="Submit"/>
+                </form>
+            </div>
             <div class = "reviews">
                 <?php while($row = $statement->fetch()) : ?>
                     <div class="review">

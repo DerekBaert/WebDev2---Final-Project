@@ -157,7 +157,6 @@ h2
     margin: 10px auto 10px auto;
     padding: 10px;
     width: 1200px;
-    align-items: center;
     justify-content: flex-start;
 }
 
@@ -168,12 +167,12 @@ h2
         border-radius: 5px;
         background-color: #212529;
         width: 375px;
-        height: 200px;
+        height:fit-content;
+        max-height: 500px;
         padding: 20px;
         padding-top: 15px;
         display: flex;
         margin: 5px;
-        flex-direction: column;
     }
 
 .reviewHeader
@@ -254,7 +253,7 @@ h2
     margin: auto;
 }
 
-.addReview form, .viewGames form
+.viewGames form
 {
     display: flex;
     flex-direction: column;
@@ -384,9 +383,14 @@ h2
         margin: 5px;
     }
 
-    .invalidLogin
+    .invalidLogin, .invalidDelist
     {
         color: red;
+    }
+
+    .validDelist
+    {
+        color: green;
     }
 
     .login h6

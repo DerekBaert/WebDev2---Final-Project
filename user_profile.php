@@ -7,7 +7,7 @@
     require 'ImageResizeException.php';
 
     $isUser = false;
-
+    
     if($_GET)
     {
         $userId = filter_input(INPUT_GET, 'user', FILTER_VALIDATE_INT);

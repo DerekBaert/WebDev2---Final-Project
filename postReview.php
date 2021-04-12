@@ -1,6 +1,7 @@
 <?php 
     session_start();
-    require 'header.php';    
+    
+    
 
     if($_POST)
     {
@@ -20,7 +21,10 @@
         $statement = $db->prepare($query); 
         $statement->execute();
 
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
     }
+
+    require 'header.php';
 ?>
 
 <form class='newReview' method='post'>

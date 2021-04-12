@@ -85,7 +85,7 @@
                         <?php else: ?>
                             <h5>Age Rating: <?= getRating($game['age_ratings'][0]['rating']) ?></h5>
                         <?php endif  ?>    
-                        <h5>Average Score: 10/10</h5>
+                        <h5>Average Score: <?=reviewAverage($game['id'], $db)?></h5>
                     </div>
                     <div class="addReview">      
                         <form action="gamePage.php" method="post">  

@@ -30,9 +30,9 @@
     <input type="hidden" id="reviewId" name="reviewId" value="<?=$reviewId?>">
         <?php if($_POST) : ?>
             <?php if($count != 0) :?>
-                <h6 class="invalidLogin">Delist successful.</h6>
+                <h6 class="invalidDelist">Delist successful.</h6>
             <?php else: ?>
-                <h6 class="invalidLogin">Delist unsuccessful.</h6>
+                <h6 class="validDelist">Delist unsuccessful.</h6>
                 <button type="submit" class="btn btn-outline-success">Submit</button>
             <?php endif ?>
         <?php else : ?>

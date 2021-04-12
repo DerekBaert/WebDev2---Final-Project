@@ -99,6 +99,7 @@ h4
     margin: 10px auto 10px auto;
     padding: 10px;
     width: 1200px;
+    height: auto;
     align-items: center;
     justify-content: center;
 }
@@ -110,7 +111,8 @@ h4
         border-radius: 5px;
         background-color: #212529;
         width: 375px;
-        height: 200px;
+        height: fit-content;
+        max-height: auto;
         padding: 20px;
         padding-top: 15px;
         display: flex;
@@ -178,6 +180,17 @@ h4
         .review
         {
             display: grid;
+            color: rgba(255,255,255,.55);
+            border: 1px solid #3f5e5a;
+            border-radius: 5px;
+            background-color: #212529;
+            width: 375px;
+            height:fit-content;
+            max-height: 500px;
+            padding: 20px;
+            padding-top: 15px;
+            display: flex;
+            margin: 5px;
         }
 
         .reviewContent
@@ -270,11 +283,24 @@ h4
 .addReview
 {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    margin: auto;
+    justify-content: center;    
 }
+
+
+.changeOrder
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 90%;
+}
+
+    .changeOrder select
+    {
+        margin: 10px;
+    }
 
 .btn.btn-primary
 {
@@ -286,14 +312,6 @@ h4
 .btn.btn-primary:hover
 {
     background-color: #353831;
-}
-
-.addReview form
-{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 .addReview input
