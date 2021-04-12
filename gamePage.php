@@ -11,7 +11,6 @@
 
     if($_POST)
     {
-
         $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);                
         
         if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
@@ -55,7 +54,7 @@
         $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
         $game = json_decode($json, true)[0];  
             
-        $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE game_id = " . $id . " AND visible = 1 ORDER BY date_posted DESC";
+        $query = "SELECT  r.id AS id, r.review AS review, r.score AS score, r.user_id AS user_id, r.game_id AS game_id, r.date_posted AS date_posted, u.username AS username FROM reviews r JOIN user u ON u.id = user_id WHERE date_posted > " . strtotime('-14 days') . " AND visible = 1";
         $statement = $db->prepare($query); 
         $statement->execute();
     }    

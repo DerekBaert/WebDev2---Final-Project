@@ -69,8 +69,6 @@
                 $medium = "{$withoutExt}_Medium.{$fileExtension}";
                 $pictureId = $oldImages[0]["profile_picture"];
 
-                echo $pictureId;
-
                 $updateQuery = "UPDATE user_images SET original=:Original, thumbnail=:Thumbnail,  medium=:Medium WHERE id = :PictureId";
                 $UpdateStatement = $db->prepare($updateQuery); 
                 $UpdateStatement->bindValue(':Original', $imagePath);
@@ -146,7 +144,7 @@
                 <?php endif ?>                                                        
             </div>
             <div class="reviewFooter">
-                <a href="fullReview.php?review=<?= $review['id']?>">See full review</a>                            
+                <a href="fullReview.php?review=<?= $review['id']?>&game=<?=$review['game_id']?>">See full review</a>                            
             </div>
         </div>        
     <?php endwhile?>

@@ -8,10 +8,14 @@
         $reviewId = filter_input(INPUT_GET, 'review', FILTER_VALIDATE_INT);
         $gameId = filter_input(INPUT_GET, 'game', FILTER_VALIDATE_INT);
 
-        $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE reviews.id = :ReviewId";
+        $query = "SELECT  r.id AS id, r.review AS review, r.score AS score, r.user_id AS user_id, r.game_id AS game_id, r.date_posted AS date_posted, u.username AS username 
+            FROM reviews r JOIN user u ON u.id = user_id WHERE r.id = :ReviewId";
         $statement = $db->prepare($query); 
         $statement->bindValue(":ReviewId", $reviewId);
         $statement->execute();
+
+        
+        //$statement->execute();
 
         if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
         {

@@ -52,7 +52,7 @@
     $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
     $games = json_decode($json, true); 
 
-    $query = "SELECT * FROM reviews JOIN user ON user.id = reviews.user_id WHERE date_posted > " . strtotime('-14 days') . " AND visible = 1";
+    $query = "SELECT  r.id AS id, r.review AS review, r.score AS score, r.user_id AS user_id, r.game_id AS game_id, r.date_posted AS date_posted, u.username AS username FROM reviews r JOIN user u ON u.id = user_id WHERE date_posted > " . strtotime('-14 days') . " AND visible = 1";
     $statement = $db->prepare($query); 
     $statement->execute();
 
