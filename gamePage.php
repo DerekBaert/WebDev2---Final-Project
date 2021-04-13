@@ -63,11 +63,13 @@
                  FROM reviews r 
                  JOIN user u ON u.id = user_id
                  WHERE game_id = :GameId AND visible = 1
-                 ORDER BY :Order";
-
+                 ORDER BY {$order}";
+        //echo $order;
+        
         $statement = $db->prepare($query); 
         $statement->bindValue(":GameId", $id);
-        $statement->bindValue(":Order", $order);
+        //$statement->bindValue(":Order", $order);
+        //echo $query;
         $statement->execute();        
     }    
 

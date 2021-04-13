@@ -8,21 +8,25 @@
         $statement->execute();
         $scores = $statement->fetchAll();
 
+        
         $sum = 0;
-
+        $count = 0;
         foreach($scores as $score)
         {
-            $sum .= $score['score'];
-        }
+            $sum = $sum + $score['score'];
+            $count = ++$count;
+        }       
 
         if($sum != 0)
         {
-            $average = ($sum / count($scores)) . "/10";
+            $average = $sum / count($scores);
+            $average = "{$average}/10";
         }
         else
         {
             $average = "Unrated";
         }
+        //print_r($sum);
         return $average;
     }
 

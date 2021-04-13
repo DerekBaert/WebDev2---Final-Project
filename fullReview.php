@@ -94,7 +94,7 @@
             </div>                      
             <div class = "fullReview">
                 <?php while($row = $statement->fetch()) : ?>
-                    <div class="review">
+                    <div class="review full">
                         <div class= "reviewHeader">
                                 <h1><?=$row['score']?>/10</h1>
                             <div>

@@ -111,13 +111,17 @@ h4
         border-radius: 5px;
         background-color: #212529;
         width: 375px;
-        height: fit-content;
-        max-height: auto;
+        max-height: 500px;
         padding: 20px;
         padding-top: 15px;
         display: flex;
         margin: 5px;
         flex-direction: column;
+    }
+
+    .review.full
+    {
+        width: 1200px;
     }
 
     .quickdata
@@ -159,9 +163,8 @@ h4
 
         .quickdata.message
         {
-            align-self: center;
             height: 85px;
-            width: 400px;
+            width: 600px;
         }
 
         .quickdata.message p

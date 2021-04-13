@@ -1,33 +1,41 @@
 <?php 
     session_start();
+    require 'ProjectFunctions.php';
     
-    
-
     if($_POST)
     {
-        $gameId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $gameId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $review = filter_input(INPUT_POST, 'review', FILTER_SANITIZE_STRING);
-        $score = $_POST['score'];
 
-        $query = "INSERT INTO reviews (user_id, game_id, review, score) values (:UserId, :GameId, :Review, :Score)";
-        $statement = $db->prepare($query); 
-        $statement->bindValue(':UserId', $_SESSION['user']['id']);
-        $statement->bindValue(':GameId', $gameId);
-        $statement->bindValue(':Review', $review);
-        $statement->bindValue(':Score', $score);
-        $statement->execute(); 
+        if(!isset($db))
+        {
+            $db = connect();
+        }
 
-        $query = "UPDATE user SET number_of_reviews = number_of_reviews + 1 WHERE id = " . $_SESSION['user']['id'];
-        $statement = $db->prepare($query); 
-        $statement->execute();
+        if(isset($_POST['score']))
+        {
+            $score = $_POST['score'];
 
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+            $query = "INSERT INTO reviews (user_id, game_id, review, score) values (:UserId, :GameId, :Review, :Score)";
+            $statement = $db->prepare($query); 
+            $statement->bindValue(':UserId', $_SESSION['user']['id']);
+            $statement->bindValue(':GameId', $gameId);
+            $statement->bindValue(':Review', $review);
+            $statement->bindValue(':Score', $score);
+            $statement->execute(); 
+
+            $query = "UPDATE user SET number_of_reviews = number_of_reviews + 1 WHERE id = " . $_SESSION['user']['id'];
+            $statement = $db->prepare($query); 
+            $statement->execute();
+
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+        }      
     }
 
     require 'header.php';
 ?>
 
-<form class='newReview' method='post'>
+<form class='newReview' method='post' action="postReview.php?id=<?=$gameId?>">
     <label for="review">Review:</label>
     <textarea id="review" name="review" rows='8'></textarea>
     <div class='reviewScore'>
@@ -45,5 +53,6 @@
         </select>
         <p>/10</p>
     </div>
+    <input type="hidden" value="<?=$gameId?>" name="id">
     <input type="submit" value="Submit Review" id="submitReview">
 </form>

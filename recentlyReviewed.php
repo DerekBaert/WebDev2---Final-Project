@@ -45,7 +45,7 @@
         //$body = 'fields date, game.*; where date > ' . strtotime('-14 days') . ';';
         $body = "fields id, name, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
                     sort first_release_date desc; 
-                        where id = {$ids};";
+                        where id = ({$ids});";
         
         $post = array
         ('http' =>
