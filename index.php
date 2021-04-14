@@ -78,8 +78,7 @@
                             <h5>Average Score: <?=reviewAverage($game['id'], $db)?></h5>
                         </div>
                         <div class="addReview"> 
-                            <form action="gamePage.php" method="post">  
-                                <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
+                            <form action="gamePage.php?id=<?= $game['id'] ?>" method="post"> 
                                 <input type="submit" name="View Reviews" class="btn btn-primary" value="View Reviews"/>
                             </form>                
                         </div> 

@@ -39,7 +39,7 @@
         <tbody>            
             <?php while($row = $statement->fetch()) : ?>
                 <tr>
-                    <td><?=$row['username']?></td>
+                    <td><a href="user_profile.php?=user<?=$row['id']?>"><?=$row['username']?></a></td>
                     <td><?=$row['email']?></td>
                     <td><?=$row['number_of_reviews']?></td>
                     <td><?=findAccountType($row['account_type'])?></td>

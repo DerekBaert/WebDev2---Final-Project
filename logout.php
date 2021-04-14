@@ -1,6 +1,7 @@
 <?php
     session_start();
     unset($_SESSION['user']);   
-    header("Location: index.php");
+    header("Location: {$_SERVER["HTTP_REFERER"]}");
+    exit(0);
 ?>
 

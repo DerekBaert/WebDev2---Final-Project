@@ -5,6 +5,9 @@
     // Store username, role and id in SESSION
     // if session[user] isset, display logout (unset(session[user]))
     session_start();
+
+    $returnPage = $_SERVER["HTTP_REFERER"];
+
     require 'ProjectFunctions.php';
     if($_POST)
     {
@@ -15,9 +18,7 @@
 
         $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-        //$loginRedirect = filter_input(INPUT_POST, 'redirect', FILTER_SANITIZE_URL);
-
-        //echo $loginRedirect;
+        $returnPage = filter_input(INPUT_POST, 'returnPage', FILTER_SANITIZE_STRING);
         
         $query = "SELECT user.id, user.account_type, user.username, user_images.thumbnail FROM user JOIN user_images on user_images.id = user.profile_picture WHERE username = :username AND password = :password";  
         $statement = $db->prepare($query); 
@@ -37,7 +38,8 @@
                                     'username' => $row[0]['username'],
                                     'profile_picture' => $row[0]['thumbnail']
                                 ];
-            header("Location: index.php");             
+            header("location:{$returnPage}");
+            exit(0);           
         }        
     }  
 
@@ -53,7 +55,7 @@
     <input type="text" id="username" name="username">
     <label for="password">Password:</label>
     <input type="password" id="password" name="password">
-    <input type="hidden" id="redirect" name="redirect">
+    <input type="hidden" value="<?=$returnPage?>" name="returnPage">
     <button type="submit" class="btn btn-outline-success">Login</button>
         <?php if($_POST) : ?>
             <?php if(count($row) == 0) :?>

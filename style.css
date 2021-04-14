@@ -195,14 +195,14 @@ h2
         font-weight: lighter;
     }
 
-    .reviewHeader h5 a
+    .reviewHeader h5 a, td a
     {
         color: #4c6672;
         font-weight: bold;
         text-decoration: none;
     }
 
-    .reviewHeader h5 a:hover
+    .reviewHeader h5 a:hover, td a:hover
     {
         color: #4c726c;
     }

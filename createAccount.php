@@ -1,6 +1,5 @@
 <?php
     session_start();
-    require 'header.php';
     require 'ProjectFunctions.php';
     use Gumlet\ImageResize;
     require 'ImageResize.php';    
@@ -10,8 +9,15 @@
     $validFile = false;
     $errorMessage = '';
 
+    $returnPage = $_SERVER["HTTP_REFERER"];
+
     if($_POST)
     {       
+        if(!isset($db))
+        {
+            $db = connect();
+        }
+        $returnPage = filter_input(INPUT_POST, 'returnPage', FILTER_SANITIZE_STRING);
         $image_upload = isset($_FILES['profile']) && ($_FILES['profile']['error'] === 0);
  
         if ($image_upload) 
@@ -82,7 +88,21 @@
                     $statement->bindValue(':Username', $username);
                     $statement->bindValue(':Password', $password);
                     $statement->bindValue(':Email', $email);
-                    $statement->execute();
+                    $success = $statement->execute();
+                    
+
+                    if($success)
+                    {
+                        $_SESSION['user'] = [
+                            'id' => $db->lastInsertId(), 
+                            'role'=> 3, 
+                            'username' => $username,
+                            'profile_picture' => $withoutExt . '_Thumbnail' . '.' . $fileExtension
+                            ];
+                    }
+
+                    header("location:{$returnPage}");
+                    exit(0);       
                 }
                 else if($validEntry && !$image_upload)
                 {
@@ -99,16 +119,29 @@
                     $statement->bindValue(':Username', $username);
                     $statement->bindValue(':Password', $password);
                     $statement->bindValue(':Email', $email);
-                    $statement->execute();
+                    $success = $statement->execute();
+
+                    if($success)
+                    {
+                        $_SESSION['user'] = [
+                            'id' => $db->lastInsertId(), 
+                            'role'=> 3, 
+                            'username' => $username,
+                            'profile_picture' => "Placeholder_Thumbnail.png"
+                            ];
+                    }
+                    header("location:{$returnPage}");
+                    exit(0);       
                 }
-            }
+            }  
         }
         else
         {
             $validEntry = false;
             $errorMessage = 'Username, Email Address and Password are all required fields.';
         }        
-    }    
+    }
+    require 'header.php';    
 ?>
 
 <form class='login' method="post" enctype="multipart/form-data"> 
@@ -122,6 +155,7 @@
     <input type="text" id="email" name="email">
     <label for="image">Upload Profile Picture:</label>
     <input type="file" id="profile" name="profile">
+    <input type="hidden" value="<?=$returnPage?>" name="returnPage">
     <input type="submit" value="Create Account" id="submitLogin">
     <?php if($_POST) : ?>
         <?php if($validEntry) : ?>

@@ -9,10 +9,8 @@
     require 'header.php';
     require 'ProjectFunctions.php';    
     $order = "date_posted ASC";
-    
-    if($_POST)
-    {
-        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);                
+
+    $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);                
         
         if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
         {
@@ -71,10 +69,7 @@
         $statement->bindValue(":GameId", $id);
         //$statement->bindValue(":Order", $order);
         //echo $query;
-        $statement->execute();        
-    }    
-
-    //var_dump($statement->fetch());
+        $statement->execute();     
 ?>
         <link href="styleSingle.css" rel="stylesheet">
         <div class="container" id="game">
