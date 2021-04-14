@@ -108,7 +108,11 @@
                         <?php if(isset($_SESSION['user'])) :?>
                             <?php if($_SESSION['user']['role'] == 1 || $_SESSION['user']['role'] == 2) : ?>
                                 <div class="reviewFooter">
-                                    </span> <a href="delistReview.php?review=<?= $row['id']?>">Delist review</a>                            
+                                    </span> <a href="delistReview.php?review=<?= $row['id']?>">Delist review</a>  
+                                    <?php if($_SESSION['user']['id'] == $row['user_id']) : ?>
+                                        <span> | </span>
+                                        <a href="edit.php?review=<?= $row['id']?>">Edit Review</a>                          
+                                    <?php endif ?>                          
                                 </div>
                             <?php endif ?>
                         <?php endif ?>

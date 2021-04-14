@@ -11,7 +11,7 @@
     {
         header('Location: index.php');
     }
-    require 'header.php';
+    
     require 'ProjectFunctions.php';    
 
     if($_GET)
@@ -69,38 +69,6 @@
 
         $url = 'https://api.igdb.com/v4/platforms';
     }
-
-    /*if($category == 'game')
-    {
-        $body = 
-        "query games/count \"Count\"
-        {
-            search \"{$search}\";
-        };
-
-        query games \"Results\"
-        {
-            fields id, name, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
-                search \"{$search}\"; limit 24; offset {$pageOffset};
-        };";
-    }
-    else
-    {
-        $body = 
-        "query platforms/count \"Count\" 
-        {
-            search \"{$search}\";
-        };
-        
-        query platforms \"Results\"
-        {
-            fields id, name, platform_logo.image_id, summary, generation; 
-                search \"{$search}\"; 
-                    limit 24; offset {$pageOffset};
-        };";        
-    }
-
-    $url = 'https://api.igdb.com/v4/multiquery';*/
         
     $post = array
     ('http' =>
@@ -129,6 +97,8 @@
             $noResults = "No results for \"{$search}\"";
         }
     }
+
+    require 'header.php';
 ?>
 
 <div class="container" id="games">
