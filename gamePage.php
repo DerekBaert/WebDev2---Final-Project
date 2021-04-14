@@ -115,6 +115,7 @@
                     <?php if($_SESSION['user']['role'] != 4) : ?>
                         <form action="postReview.php" method=post class="postReview">                  
                             <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
+                            <input type="hidden" id="type" name="type" value="post" />
                             <input type="submit" name=<?= $game['id'] ?> class="btn btn-primary" value="Post Review"/>
                         </form> 
                     <?php else :?>  

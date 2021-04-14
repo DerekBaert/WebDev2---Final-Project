@@ -144,7 +144,21 @@
                 <?php endif ?>                                                        
             </div>
             <div class="reviewFooter">
-                <a href="fullReview.php?review=<?= $review['id']?>&game=<?=$review['game_id']?>">See full review</a>                            
+                <a href="fullReview.php?review=<?= $review['id']?>&game=<?=$review['game_id']?>">See full review</a>   
+                <?php if($isUser) : ?>
+                        <form action="postReview.php" method=post class="postReview">                  
+                            <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
+                            <input type="hidden" id="type" name="type" value="edit" />
+                            <input type="hidden" id="review" name="review" value="<?=$review['id']?>" />
+                            <input type="submit" name=<?= $game['id'] ?> class="btn btn-primary" value="Edit Review"/>
+                        </form> 
+                        <form action="postReview.php" method=post class="postReview">                  
+                            <input type="hidden" id="id" name="id" value="<?= $game['id'] ?>" />
+                            <input type="hidden" id="type" name="type" value="delete" />
+                            <input type="hidden" id="review" name="review" value="<?=$review['id']?>" />
+                            <input type="submit" name=<?= $game['id'] ?> class="btn btn-primary" value="Delete Review"/>
+                        </form> 
+                <?php endif?>                         
             </div>
         </div>        
     <?php endwhile?>

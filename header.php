@@ -107,8 +107,8 @@
                         <li><a class="dropdown-item" href="console.php?id=130&name=Nintendo%20Switch">Nintendo Switch</a></li>
                         <li class="dropdown-header">PC</li>                             
                         <li><a class="dropdown-item" href="console.php?id=6&name=Windows">Windows</a></li> 
-                        <!--<li><hr class="dropdown-divider" style="background-color:#6c757d;"></li>
-                        <li><a class="dropdown-item" href="#">All Platforms</a></li> -->
+                        <li><hr class="dropdown-divider" style="background-color:#6c757d;"></li>
+                        <li><a class="dropdown-item" href="allConsoles.php">All Platforms</a></li>
                     </ul>
                     </li>   
                     <?php if($adminUser) : ?>

@@ -286,7 +286,6 @@ h4
 .addReview
 {
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;    
 }

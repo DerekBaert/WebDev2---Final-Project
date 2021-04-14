@@ -4,32 +4,42 @@
     
     if($_POST)
     {
-        $gameId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $review = filter_input(INPUT_POST, 'review', FILTER_SANITIZE_STRING);
-
         if(!isset($db))
         {
             $db = connect();
         }
 
-        if(isset($_POST['score']))
+        if($_POST['type'] == "post")
         {
-            $score = $_POST['score'];
+            $gameId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+            $review = filter_input(INPUT_POST, 'review', FILTER_SANITIZE_STRING);
 
-            $query = "INSERT INTO reviews (user_id, game_id, review, score) values (:UserId, :GameId, :Review, :Score)";
-            $statement = $db->prepare($query); 
-            $statement->bindValue(':UserId', $_SESSION['user']['id']);
-            $statement->bindValue(':GameId', $gameId);
-            $statement->bindValue(':Review', $review);
-            $statement->bindValue(':Score', $score);
+            if(isset($_POST['score']))
+            {
+                $score = $_POST['score'];
+
+                $query = "INSERT INTO reviews (user_id, game_id, review, score) values (:UserId, :GameId, :Review, :Score)";
+                $statement = $db->prepare($query); 
+                $statement->bindValue(':UserId', $_SESSION['user']['id']);
+                $statement->bindValue(':GameId', $gameId);
+                $statement->bindValue(':Review', $review);
+                $statement->bindValue(':Score', $score);
+                $statement->execute(); 
+
+                $query = "UPDATE user SET number_of_reviews = number_of_reviews + 1 WHERE id = " . $_SESSION['user']['id'];
+                $statement = $db->prepare($query); 
+                $statement->execute();
+
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+            }      
+        }
+        else if($_POST['type'] == "delete")
+        {
+            $id = filter_input(INPUT_POST, 'review', FILTER_VALIDATE_INT);
+            $query = "DELETE FROM reviews WHERE id = {$id}";
+            $statement = $db->prepare($query);
             $statement->execute(); 
-
-            $query = "UPDATE user SET number_of_reviews = number_of_reviews + 1 WHERE id = " . $_SESSION['user']['id'];
-            $statement = $db->prepare($query); 
-            $statement->execute();
-
-            header('Location: ' . $_SERVER['HTTP_REFERER']);
-        }      
+        }
     }
 
     require 'header.php';

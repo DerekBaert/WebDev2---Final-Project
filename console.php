@@ -87,17 +87,27 @@
     //var_dump($games[0]['count']);
     //var_dump($games[1]['result']);
     $count = $games[0]['count'];
+
+    echo count($games[1]['result']);
 ?>        
         <div class="container" id="games">
-            <h2><?=$console?></h2>
+            <?php if(count($games[1]['result']) != 0) : ?>
+                <h2>Results for "<?=$console?>" </h2>
+            <?php else : ?>
+                <h2>No more results for "<?=$console?>" </h2>
+            <?php endif?>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                <?php if($pageOffset == 0) :?>
-                    <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Previous</a></li>
-                <?php else : ?>
-                    <li class="page-item" id="previousButton"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
-                <?php endif?>
-                    <li class="page-item" id="nextButton"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
+                    <?php if($pageOffset == 0) :?>
+                        <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Previous</a></li>
+                    <?php else : ?>
+                        <li class="page-item" id="previousButton"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
+                    <?php endif?>
+                    <?php if($pageOffset >= $count) : ?>
+                        <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Next</a></li>
+                    <?php else : ?>
+                        <li class="page-item" id="nextButton"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
+                    <?php endif ?>
                 </ul>
             </nav>
             <?php foreach ($games[1]['result'] as $game): ?>
@@ -136,16 +146,16 @@
             <?php endforeach ?>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                <?php if($pageOffset == 0) :?>
-                    <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Previous</a></li>
-                <?php else : ?>
-                    <li class="page-item" id="previousButton"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
-                <?php endif?>
-                <?php if($pageOffset >= $count) : ?>
-                    <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Next</a></li>
-                <?php else : ?>
-                    <li class="page-item" id="nextButton"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
-                <?php endif ?>
+                    <?php if($pageOffset == 0) :?>
+                        <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Previous</a></li>
+                    <?php else : ?>
+                        <li class="page-item" id="previousButton"><a class="page-link" href="console.php?offset=<?=($pageOffset-100)?>&id=<?=$consoleId?>&name=<?=$console?>">Previous</a></li>
+                    <?php endif?>
+                    <?php if($pageOffset >= $count) : ?>
+                        <li class="page-item disabled" id="previousButton"><a class="page-link" href="console.php">Next</a></li>
+                    <?php else : ?>
+                        <li class="page-item" id="nextButton"><a class="page-link" href="console.php?offset=<?=($pageOffset+100)?>&id=<?=$consoleId?>&name=<?=$console?>">Next</a></li>
+                    <?php endif ?>
                 </ul>
             </nav>
         </div>        
