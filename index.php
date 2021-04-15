@@ -1,9 +1,3 @@
-<!-----------
- * Author: Derek Baert
- * Date: March 04, 2021
- * File: Main Page
- ------------>
-
 <?php
     session_start();
     require 'ProjectFunctions.php'; 

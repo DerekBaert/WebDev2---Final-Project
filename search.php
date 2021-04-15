@@ -7,12 +7,15 @@
 <?php
     session_start();
 
+    $game = true;
+
     if($_POST && empty($_POST['search']))
     {
         header('Location: index.php');
     }
     
     require 'ProjectFunctions.php';    
+    require 'header.php';
 
     if($_GET)
     {
@@ -27,6 +30,7 @@
         $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING);
         $search = filter_input(INPUT_POST, 'search', FILTER_SANITIZE_STRING); 
     }
+
 
     if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
     {
@@ -60,12 +64,14 @@
                     search \"{$search}\"; limit 24; offset {$pageOffset};";
 
         $url = 'https://api.igdb.com/v4/games';
+
     }
     else
     {
         $body = "fields id, name, platform_logo.image_id, summary, generation; 
                     search \"{$search}\"; 
                         limit 24; offset {$pageOffset};";
+        $game = false;
 
         $url = 'https://api.igdb.com/v4/platforms';
     }
@@ -98,7 +104,7 @@
         }
     }
 
-    require 'header.php';
+    
 ?>
 
 <div class="container" id="games">
@@ -117,7 +123,7 @@
                 <li class="page-item" id="nextButton"><a class="page-link" href="search.php?offset=<?=($pageOffset+25)?>&search=<?=$search?>&category=<?=$category?>">Next</a></li>
         </ul>
     </nav>    
-    <?php if($category == 'game') : ?>
+    <?php if($game) : ?>
         <?php $i = 1?>
         <?php foreach ($results as $game): ?>   
             <?php if(array_key_exists('first_release_date', $game)): ?>         
@@ -149,7 +155,7 @@
                 <?php $i .= 1 ?>
             <?php endif ?>
         <?php endforeach ?>              
-    <?php else : ?>
+    <?php else: ?>
         <?php foreach ($results as $platform): ?>
             <div class="platform">
                 <?php if(array_key_exists('platform_logo', $platform)) : ?>
