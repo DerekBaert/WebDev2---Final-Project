@@ -26,7 +26,7 @@
         
     $token = $_SESSION['token']['access_token'];
 
-    // Start building query
+    // Start building query. This requires three parameters: The Content Type, my Twitch Client ID, and the Token which is stored as a session variable previously.
     $header = array
             (
                 'Content-Type: application/application/x-www-form-urlencoded\r\n',
@@ -34,11 +34,14 @@
                 'Authorization: Bearer ' .  $token
             );
 
+    // The body section of the post request specifies what properties of each game or console need to be retrieved. 
     $body = "fields id, name, platform_logo.image_id, summary, generation; 
         limit 24; offset {$pageOffset};";
 
+    // The $url variable states what category will be accessed through the API. In this example, it is pulling from the table of game consoles in the database
     $url = 'https://api.igdb.com/v4/platforms';
         
+    // Now we can put this all together as an array to send in the post request and store the results in an array. 
     $post = array
     ('http' =>
         array
@@ -65,8 +68,10 @@
                 <li class="page-item" id="nextButton"><a class="page-link" href="allConsoles.php?offset=<?=($pageOffset+25)?>">Next</a></li>
         </ul>
     </nav> 
+    <!-- Now that we have the results stored in an array, we can loop through each result and use the data to create an entry on the page. !-->
 <?php foreach ($results as $platform): ?>
         <div class="platform">
+        <!-- First I check if there is an image link stored that i can use. If there is, I construct the link so it can be displayed in the entry. If not, then a placeholder is used. !-->
             <?php if(array_key_exists('platform_logo', $platform)) : ?>
             <?php $image = 'https://images.igdb.com/igdb/image/upload/t_thumb/' . $platform['platform_logo']['image_id'] . '.jpg' ?>
             <?php else : ?>

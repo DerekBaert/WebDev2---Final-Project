@@ -71,9 +71,11 @@
         //echo $query;
         $statement->execute();     
 ?>
+        <!-- Here on the game page, all of the same steps with retrieving the token and requesting the game data are taken, however now it is simply searching for the one game. !-->
         <link href="styleSingle.css" rel="stylesheet">
         <div class="container" id="game">
             <div class="image">
+                <!-- Once again the existence of box art is verified, and if it is not present then a placeholder is used.!-->
                 <?php if(array_key_exists('cover', $game)) : ?>
                     <?php $image = 'https://images.igdb.com/igdb/image/upload/t_cover_big/' . $game['cover']['image_id'] . '.jpg' ?>
                 <?php else : ?>
@@ -81,11 +83,16 @@
                 <?php endif ?>
                 <img src=<?= $image?> alt="Boxart">                
             </div> 
+            <!-- Here the name is displayed much larger, as a header alongside the game's art.!-->
             <div class="quickdata title">
                 <h4><?= $game['name']?></h4> 
             </div>            
+            <!-- Here there is a lot more  data displayed. Genres, platforms, release dates, and age ratings. Since games often fit into multiple genres and come our on different consoles,
+                the IGDB API returns these as their own arrays. To help with this, I created a function called "commaList" which turns those arrays into comma delimited lists so that the site can dynamically
+                display them in a presentable manner. !-->           
             <div class="gameData">        
-                <div class="quickdata">                       
+                <div class="quickdata">    
+                    <!-- Sometimes IGDB does not have genres listed for a game. If this happens then the site will catch it and display "No Genres Listed" !-->                   
                     <?php if(isset($game['genres'])) : ?>      
                         <h5><span class="title">Genres:</span> <?=  commaList($game['genres'], 'name') ?> </h5>          
                     <?php else : ?>
@@ -95,6 +102,7 @@
                     <h5><span class="title">Average Score: </span> <?=reviewAverage($game['id'], $db)?></h5>
                 </div>   
                 <div class="quickdata">      
+                    <!-- Similar to how some games lack genres in IGDB, some games have yet to be rated by the ESRB or PEGI. As before, the site catches this and lists it as [Unrated] !-->
                     <h5><span class="title">Original Release: </span> <?= date('F d, Y', $game['first_release_date'])?></h5> 
                     <?php if(!array_key_exists('age_ratings', $game)): ?>
                         <h5><span class="title">Age Rating:</span> [Unrated]</h5>
@@ -103,6 +111,7 @@
                     <?php endif  ?>                        
                 </div>                                 
             </div>              
+            <!-- Finally, the game's summary is displayed at the bottom before the reviews appear. !-->
             <div class ="quickdata description">
                     <p><?= $game['summary'] ?></p>
             </div>            

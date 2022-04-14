@@ -3,6 +3,9 @@
     require 'ProjectFunctions.php'; 
     require 'header.php';
 
+    /* Upon first loading the page, the php checks if the user has a token from the IGDB API stored as a session variable. 
+        Their API uses this token for authentification purposes. If a token is not set, or the token has expired, then it will send a post request to retrieve a token, and store both the token
+        and the expiry date/time in session variables. */
     if(!isset($_SESSION['token']) || $_SESSION['expiry'] <= strtotime(date('Y/m/d')))
     {
         // Create array to send in initial post to gain an access token
@@ -12,13 +15,16 @@
             'grant_type' => 'client_credentials'
         );   
 
+        // Since the process of getting a token is used on each page, a function was created and stored in  "ProjectFunctions.php".
         $_SESSION['token'] = getToken($data, 'https://id.twitch.tv/oauth2/token');
         $_SESSION['expiry'] = (strtotime(date('Y/m/d')) + $_SESSION['token']['expires_in']);
     }
     
+    // Now that we have a token stored as a session variable, let's store it as a local variable for easier reference.
+
     $token = $_SESSION['token']['access_token'];
 
-    // Start building query
+    // Now we start building the query to retrieve the data from the database. This requires three parameters: The Content Type, my Twitch Client ID, and the Token which is stored as a session variable previously.
     $header = array
             (
                 'Content-Type: application/application/x-www-form-urlencoded\r\n',
@@ -26,12 +32,23 @@
                 'Authorization: Bearer ' .  $token
             );
 
-    //$body = 'fields date, game.*; where date > ' . strtotime('-14 days') . ';';
-    $body = 'fields id, name, cover.image_id, age_ratings.rating, first_release_date, genres.name, platforms.name; 
-                sort first_release_date desc; 
-                    where first_release_date > ' . strtotime('-14 days') . ' & first_release_date < ' . strtotime(date(('Y-m-d'))) . '; 
-                        limit 5;';
+    /* Next, we need to specify what data we want to retrieve. First, we specify what properties or columns we want. In this case, we are getting the games unique ID number, it's name, 
+        the ID for the cover image, it's age rating, release dates, name of the genre, and name of the platforms it was released on. We also want to sort it from newest release to oldest, so the sort function is used as well
+        Finally, for the main page, we only want to display games which were recently released, so we are filtering out games with release dates older than 2 weeks from today, 
+        as well as games that haven't been released yet. As there are many games released, we are only limiting it to the 5 most recent, otherwise it might become too long during certain release windows.*/
+    $body = 'fields id, 
+                    name, 
+                    cover.image_id, 
+                    age_ratings.rating, 
+                    first_release_date, 
+                    genres.name, 
+                    platforms.name; 
+                        sort first_release_date desc; 
+                            where first_release_date > ' . strtotime('-14 days') . ' & first_release_date < ' . strtotime(date(('Y-m-d'))) . '; 
+                                limit 5;';
     
+
+    // Now that the header and body of the post request have been constructed, it's time to put it all together in an array to send in the post request.
     $post = array
     ('http' =>
         array
@@ -42,35 +59,40 @@
         )
     );
 
+
     $context  = stream_context_create($post);
     $json = file_get_contents('https://api.igdb.com/v4/games', false, $context);
     $games = json_decode($json, true); 
 
-    $query = "SELECT  r.id AS id, r.review AS review, r.score AS score, r.user_id AS user_id, r.game_id AS game_id, r.date_posted AS date_posted, u.username AS username FROM reviews r JOIN user u ON u.id = user_id WHERE date_posted > " . strtotime('-14 days') . " AND visible = 1";
+    // Now that the games are stored in an array, we make a call to my own datebase to retrieve the most recent reviews. This is thankfully much simpler as I don't need to go through an API.
+    $query = "SELECT  r.id AS id, r.review AS review, r.score AS score, r.user_id AS user_id, r.game_id AS game_id, r.date_posted AS date_posted, u.username AS username 
+                FROM reviews r JOIN user u ON u.id = user_id WHERE date_posted > " . strtotime('-14 days') . " AND visible = 1";
     $statement = $db->prepare($query); 
     $statement->execute();
-
-    //var_dump($statement->fetchall());
-
-    // var_dump($_SESSION['user']);
 ?>
 
         <div class="container" id="indexContent">
             <div class="container index">
+                <!-- With the results of our post request now stored in an array, we can iterate through an pull the data for each entry to use on our site. 
+                    The program "Postman" was very useful here, as it allowed me to test some of my requests, as well as see how the array it returned was laid out. !-->
                 <h2>New releases</h2>
                 <?php foreach ($games as $game): ?>
                     <div class="game">
+                        <!-- If an array key exists for the 'cover,' it uses the id for the image in a url for the image reference. 
+                            If not, then a placeholder image saved in the same location as the .html file is used. !-->
                         <?php if(array_key_exists('cover', $game)) : ?>
                             <?php $image = 'https://images.igdb.com/igdb/image/upload/t_cover_big/' . $game['cover']['image_id'] . '.jpg' ?>
                         <?php else : ?>
                             <?php $image = 'placeholder.png' ?>
                         <?php endif ?>
-                        <div class="thumbnail"><img src=<?= $image ?> alt="Boxart"></div>  
+                        <div class="thumbnail"><img src=<?= $image ?> alt="Boxart"></div> 
+                        <!-- Since this is just a small preview on the main page, I wanted to cut down on clutter, so only the release date and average score are displayed here.!--> 
                         <div class="quickdata">
                             <h4><?= $game['name']?></h4>
                             <h5>Release Date: <?= date('F d, Y', $game['first_release_date'])?></h5>   
                             <h5>Average Score: <?=reviewAverage($game['id'], $db)?></h5>
                         </div>
+                        <!-- Next, a button is added where the user can view the review page for the game itself, along with all of it's reviews. !-->
                         <div class="addReview"> 
                             <form action="gamePage.php?id=<?= $game['id'] ?>" method="post"> 
                                 <input type="submit" name="View Reviews" class="btn btn-primary" value="View Reviews"/>
